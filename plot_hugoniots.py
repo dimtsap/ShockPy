@@ -22,7 +22,7 @@ density_exp_calc = [3.584 * x[1] / (x[1] - x[0]) for x in zip(particle_velocity_
 
 s = pickle.load(open("samplesMgO.p", "rb"))
 
-up = np.linspace(3, 20, 200)
+up = np.linspace(0, 20, 200)
 
 # plt.figure()
 # for i in range(0, 1000, 5):

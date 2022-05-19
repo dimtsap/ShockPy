@@ -46,7 +46,7 @@ for k=1:length(gamma)
         rho0_rho=initial_volume_MgO/V1;
         
         %define volume as the variable
-        V=linspace(V1,0.244,1000);
+        V=linspace(V1,0.01,1000);
         PH=interp1(vH,pH,V,'cubic');  %interpolation to get the reference Hugoniot Pressure at V
         
         %calculate Es-E0
@@ -58,6 +58,8 @@ for k=1:length(gamma)
         
         Es_E0=P1*initial_volume_MgO/2 *(rho0_rho-1)/rho0_rho * (V1./V).^gamma(k) ...
             -(V1./V).^gamma(k) .* inte;
+        
+        
         Data.Ps(:,ii)=PH .*(1-gamma(k)/2.*(initial_volume_MgO./V-1)) +gamma(k)./V.*(Es_E0);
         Data.ups(:,ii)=up1;
         Vprime=V';

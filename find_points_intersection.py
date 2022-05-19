@@ -51,7 +51,7 @@ for i in range(len(l2_coords)):
     _x, _y, _z = targ_kdtree.data[close_index]
     ax.scatter(_x, _y, _z, 'gx')
     _x2, _y2, _z2 = l2_coords[i]
-    ax.scatter(_x2, _y2, _z2, 'rx')  # Plot the cross point
+    ax.scatter(_x2, _y2, _z2, 'bx')  # Plot the cross point
 
 
 plt.show()
