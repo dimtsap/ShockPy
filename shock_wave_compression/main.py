@@ -1,11 +1,7 @@
-from shock_wave_compression.Material import Material
-from shock_wave_compression.Kapton import Kapton
-from shock_wave_compression.MgO import MgO
-import matplotlib.pyplot as plt
-from scipy import interpolate
-import numpy as np
+from shock_wave_compression.material_database.Kapton import Kapton
+from shock_wave_compression.material_database.MgO import MgO
 
-from shock_wave_compression.Quartz import Quartz
+from shock_wave_compression.material_database.Quartz import Quartz
 
 # shock_pressure = 200  # GPa
 # ############

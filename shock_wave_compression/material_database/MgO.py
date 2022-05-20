@@ -1,6 +1,6 @@
 import numpy as np
 from scipy import interpolate
-from shock_wave_compression.Material import Material
+from shock_wave_compression.material_database.baseclass.Material import Material
 
 
 class MgO(Material):

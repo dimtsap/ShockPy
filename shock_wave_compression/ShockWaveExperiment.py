@@ -1,4 +1,4 @@
-from shock_wave_compression.Material import Material
+from shock_wave_compression.material_database.baseclass.Material import Material
 import numpy as np
 import seaborn as sns
 import colorsys
@@ -23,25 +23,22 @@ class ShockWaveExperiment:
 
     def run_experiment(self, shock_pressure: float):
         input_pressure = shock_pressure
-        for index_material in range(self.n_materials - 1):
+        release_isentropes = self.materials[0].hugoniot_intersection_at_pressure(shock_pressure)
+        for index_material in range(1, self.n_materials - 1):
             material_i = self.materials[index_material]
 
             up1, V1, compression_ratio = material_i.find_hugoniot_point_at_pressure(input_pressure)
-            plt.scatter(up1, input_pressure, color=self._darker_palette[index_material])
 
             (pressures_hugoniot_i, up_hugoniot_i,
              Us_hugoniot_i, volumes_hugoniot_i) = material_i.calculate_nominal_hugoniot()
-            plt.plot(up_hugoniot_i, pressures_hugoniot_i, color=self._palette[index_material],
-                     label=material_i.__class__.__name__ + " Hugoniot")
 
             release_p, release_up = material_i.calculate_isentrope(input_pressure, V1, up1, compression_ratio)
 
-            material_i_1 = self.materials[index_material+1]
+            material_i_1 = self.materials[index_material + 1]
             (pressures_i_1, up_i_1, Us_i_1, volumes_i_1) = material_i_1.calculate_nominal_hugoniot()
 
             intersection_up, intersection_p = \
                 Material.calculate_intersection(up_i_1, pressures_i_1, release_up[0], release_p[0])
-            plt.scatter(intersection_up, intersection_p, color=self._darker_palette[index_material+1])
 
             if up1 > intersection_up:
                 indices = np.where((intersection_up <= release_up[0]) & (release_up[0] <= up1))
@@ -49,14 +46,11 @@ class ShockWaveExperiment:
                 indices = np.where((up1 <= release_up[0]) & (release_up[0] <= intersection_up))
             release_up = release_up[0][indices]
             release_p = release_p[0][indices]
-            plt.plot(release_up, release_p, color=self._lighter_palette[index_material], linestyle='dashed')
 
             input_pressure = intersection_p
 
         material_last = self.materials[-1]
         (pressures_last, up_last, Us_last, volumes_last) = material_last.calculate_nominal_hugoniot()
-        plt.plot(up_last, pressures_last, color=self._palette[-1],
-                 label=material_last.__class__.__name__ + " Hugoniot")
 
         plt.xlim((4, 12))
         plt.ylim((0, 700))
