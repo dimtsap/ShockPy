@@ -7,6 +7,9 @@ from shock_wave_compression.material_database.baseclass.Material import Material
 
 class Kapton(Material):
 
+    def find_hugoniot_point_at_pressure(self, pressure: float):
+        pass
+
     def __init__(self, gamma_eff: float = 1.1,
                  initial_density: float = 1.33):  # Source https://dielectricmfg.com/knowledge-base/kapton/
         super().__init__(1.1, initial_density)

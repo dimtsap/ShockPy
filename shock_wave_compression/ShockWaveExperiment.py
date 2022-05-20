@@ -22,39 +22,47 @@ class ShockWaveExperiment:
         return colorsys.hls_to_rgb(h, min(1, l * scale_l), s=s)
 
     def run_experiment(self, shock_pressure: float):
-        input_pressure = shock_pressure
         release_isentropes = self.materials[0].hugoniot_intersection_at_pressure(shock_pressure)
         for index_material in range(1, self.n_materials - 1):
             material_i = self.materials[index_material]
 
-            up1, V1, compression_ratio = material_i.find_hugoniot_point_at_pressure(input_pressure)
+            new_material_isentropes = []
+            for isentrope in release_isentropes:
+                new_material_isentropes.extend(material_i.hugoniot_intersection_with_isentrope(isentrope))
 
-            (pressures_hugoniot_i, up_hugoniot_i,
-             Us_hugoniot_i, volumes_hugoniot_i) = material_i.calculate_nominal_hugoniot()
+            release_isentropes = new_material_isentropes
 
-            release_p, release_up = material_i.calculate_isentrope(input_pressure, V1, up1, compression_ratio)
 
-            material_i_1 = self.materials[index_material + 1]
-            (pressures_i_1, up_i_1, Us_i_1, volumes_i_1) = material_i_1.calculate_nominal_hugoniot()
 
-            intersection_up, intersection_p = \
-                Material.calculate_intersection(up_i_1, pressures_i_1, release_up[0], release_p[0])
+            # up1, V1, compression_ratio = material_i.find_hugoniot_point_at_pressure(input_pressure)
+            #
+            # (pressures_hugoniot_i, up_hugoniot_i,
+            #  Us_hugoniot_i, volumes_hugoniot_i) = material_i.calculate_nominal_hugoniot()
+            #
+            # release_p, release_up = material_i.calculate_isentrope(input_pressure, V1, up1, compression_ratio)
+            #
+            # material_i_1 = self.materials[index_material + 1]
+            # (pressures_i_1, up_i_1, Us_i_1, volumes_i_1) = material_i_1.calculate_nominal_hugoniot()
+            #
+            # intersection_up, intersection_p = \
+            #     Material.calculate_intersection(up_i_1, pressures_i_1, release_up[0], release_p[0])
+            #
+            # if up1 > intersection_up:
+            #     indices = np.where((intersection_up <= release_up[0]) & (release_up[0] <= up1))
+            # else:
+            #     indices = np.where((up1 <= release_up[0]) & (release_up[0] <= intersection_up))
+            # release_up = release_up[0][indices]
+            # release_p = release_p[0][indices]
+            #
+            # input_pressure = intersection_p
 
-            if up1 > intersection_up:
-                indices = np.where((intersection_up <= release_up[0]) & (release_up[0] <= up1))
-            else:
-                indices = np.where((up1 <= release_up[0]) & (release_up[0] <= intersection_up))
-            release_up = release_up[0][indices]
-            release_p = release_p[0][indices]
-
-            input_pressure = intersection_p
-
-        material_last = self.materials[-1]
-        (pressures_last, up_last, Us_last, volumes_last) = material_last.calculate_nominal_hugoniot()
-
-        plt.xlim((4, 12))
-        plt.ylim((0, 700))
-        plt.legend()
-        plt.ylabel("Pressure (GPa)")
-        plt.xlabel("Particle Velocity (km/s)")
-        plt.show()
+        ## Post-processing
+        # material_last = self.materials[-1]
+        # (pressures_last, up_last, Us_last, volumes_last) = material_last.calculate_nominal_hugoniot()
+        #
+        # plt.xlim((4, 12))
+        # plt.ylim((0, 700))
+        # plt.legend()
+        # plt.ylabel("Pressure (GPa)")
+        # plt.xlabel("Particle Velocity (km/s)")
+        # plt.show()

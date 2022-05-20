@@ -19,18 +19,13 @@ class Material(ABC):
         self.Gamma_eff = gamma_eff
         self.isentropes=[]
 
-    @abstractmethod
-    def find_hugoniot_point_at_pressure(self, pressure: float):
-        """
-        If the hugoniot is deterministic should return only its values.
-        Otherwise, it should return the minimum and maximum particle velocities at this pressure.
-
-        :param pressure:
-        """
-        pass
 
     @abstractmethod
     def calculate_nominal_hugoniot(self):
+        pass
+
+    @abstractmethod
+    def calculate_stochastic_hugoniot(self) -> list[Hugoniot]:
         pass
 
     @abstractmethod
@@ -125,3 +120,6 @@ class Material(ABC):
                             shock_velocity=shock_velocity, volume=current_volume,
                             compression_ratio=compression_ratio,
                             hugoniot=hugoniot)
+
+    def hugoniot_intersection_with_isentrope(self, isentrope: Isentrope):
+        pass
