@@ -5,12 +5,12 @@ from scipy.interpolate import interpolate
 
 @dataclass
 class Hugoniot:
-    pressure: np.ndarray
-    particle_velocity: np.ndarray
-    shock_velocity: np.ndarray
-    volume: np.ndarray
+    pressures: np.ndarray
+    particle_velocities: np.ndarray
+    shock_velocities: np.ndarray
+    volumes: np.ndarray
     id: int = None
 
     def interpolate(self, pressure: float) -> float:
-        hugoniot_interpolator = interpolate.interp1d(self.pressure, self.particle_velocity)
+        hugoniot_interpolator = interpolate.interp1d(self.pressures, self.particle_velocities)
         return hugoniot_interpolator(pressure)

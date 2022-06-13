@@ -23,12 +23,12 @@ class ShockWaveExperiment:
 
     def run_experiment(self, shock_pressure: float):
         release_isentropes = self.materials[0].release_isentropes_at_pressure(shock_pressure)
-        for index_material in range(1, self.n_materials - 1):
+        for index_material in range(1, self.n_materials):
             material_i = self.materials[index_material]
 
             new_material_isentropes = []
             for isentrope in release_isentropes:
-                new_material_isentropes.extend(material_i.hugoniot_intersection_with_isentrope(isentrope))
+                new_material_isentropes.extend(material_i.hugoniots_intersection_with_isentrope(isentrope))
 
             release_isentropes = new_material_isentropes
 
