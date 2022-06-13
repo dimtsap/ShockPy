@@ -22,7 +22,7 @@ class ShockWaveExperiment:
         return colorsys.hls_to_rgb(h, min(1, l * scale_l), s=s)
 
     def run_experiment(self, shock_pressure: float):
-        release_isentropes = self.materials[0].hugoniot_intersection_at_pressure(shock_pressure)
+        release_isentropes = self.materials[0].release_isentropes_at_pressure(shock_pressure)
         for index_material in range(1, self.n_materials - 1):
             material_i = self.materials[index_material]
 

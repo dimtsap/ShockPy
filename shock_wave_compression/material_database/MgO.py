@@ -1,9 +1,16 @@
 import numpy as np
 from scipy import interpolate
 from shock_wave_compression.material_database.baseclass.Material import Material
+from shock_wave_compression.material_states.Hugoniot import Hugoniot
 
 
 class MgO(Material):
+    def release_isentropes_at_pressure(self, pressure: float):
+        pass
+
+    def calculate_stochastic_hugoniot(self) -> list[Hugoniot]:
+        pass
+
     def __init__(self, gamma_eff: float = 1.1,
                  initial_density: float = 3.58):
         super().__init__(gamma_eff, initial_density)

@@ -17,8 +17,7 @@ class Material(ABC):
         self.initial_density = initial_density
         self.initial_volume = 1 / initial_density
         self.Gamma_eff = gamma_eff
-        self.isentropes=[]
-
+        self.isentropes = []
 
     @abstractmethod
     def calculate_nominal_hugoniot(self):
@@ -29,7 +28,7 @@ class Material(ABC):
         pass
 
     @abstractmethod
-    def hugoniot_intersection_at_pressure(self, pressure: float):
+    def release_isentropes_at_pressure(self, pressure: float):
         """
         If the hugoniot is deterministic should return only its values.
         Otherwise, it should return the minimum and maximum particle velocities at this pressure.
@@ -39,15 +38,12 @@ class Material(ABC):
         pass
 
     def initialize_isentropes_at_pressure(self, shock_pressure: float):
-        point_hugoniot_tuples = self.hugoniot_intersection_at_pressure(shock_pressure)
-        release_isentropes = [
-            self.calculate_isentrope(intersection, hugoniot)
-            for (intersection, hugoniot) in point_hugoniot_tuples
-        ]
+        point_hugoniot_tuples = self.release_isentropes_at_pressure(shock_pressure)
+        release_isentropes = [self.calculate_isentrope(intersection, hugoniot)
+                              for (intersection, hugoniot) in point_hugoniot_tuples]
         return release_isentropes
 
-
-    def calculate_isentrope(self, intersection, hugoniot):
+    def calculate_isentrope(self, hugoniot, intersection):
         pressuresList = hugoniot.pressure.tolist()
         volumesList = hugoniot.volume.tolist()
         release_pressures = []
@@ -71,9 +67,9 @@ class Material(ABC):
                 energy_integral.append(aux[0])
 
             Es_E0 = [intersection.pressure * self.initial_volume / 2 * (
-                        intersection.compression_ratio - 1) / intersection.compression_ratio * (
+                    intersection.compression_ratio - 1) / intersection.compression_ratio * (
                              intersection.volume / x) ** self.Gamma_eff - (
-                                 intersection.volume / x) ** self.Gamma_eff * y
+                             intersection.volume / x) ** self.Gamma_eff * y
                      for (x, y) in zip(V, energy_integral)]
 
             release_pressure = [PH * (1 - self.Gamma_eff / 2 * (self.initial_volume / v - 1)) + self.Gamma_eff / v * dE
