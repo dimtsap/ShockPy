@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from shock_wave_compression.material_states.Hugoniot import Hugoniot
+from shock_wave_compression.material_states.Isentrope import Isentrope
 
 
 @dataclass
@@ -10,3 +11,4 @@ class Intersection:
     volume: float
     compression_ratio: float
     hugoniot: Hugoniot = None
+    isentrope: Isentrope = None

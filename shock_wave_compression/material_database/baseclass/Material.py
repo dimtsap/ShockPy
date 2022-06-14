@@ -13,12 +13,15 @@ from shock_wave_compression.material_states.Isentrope import Isentrope
 class Material(ABC):
 
     def __init__(self, gamma_eff: float,
-                 initial_density: float):
+                 initial_density: float,
+                 is_stochastic=False):
+        self.is_stochastic = is_stochastic
         self.initial_density = initial_density
         self.initial_volume = 1 / initial_density
         self.Gamma_eff = gamma_eff
         self.isentropes = []
         self.hugoniots_list = []
+        self.nominal_hugoniot: Hugoniot = None
 
     def initialize_isentropes_at_pressure(self, shock_pressure: float):
         point_hugoniot_tuples = self.release_isentropes_at_pressure(shock_pressure)
@@ -74,6 +77,11 @@ class Material(ABC):
                          intersection=intersection)
 
     def calculate_intersection(self, hugoniot, isentrope):
+        # import matplotlib.pyplot as plt
+        # plt.figure()
+        # plt.plot(hugoniot.particle_velocities, hugoniot.pressures)
+        # plt.plot(np.squeeze(isentrope.particle_velocities), np.squeeze(isentrope.pressures))
+        # plt.show()
         line_1 = LineString(np.column_stack((hugoniot.particle_velocities, hugoniot.pressures)))
         line_2 = LineString(np.column_stack((np.squeeze(isentrope.particle_velocities),
                                              np.squeeze(isentrope.pressures))))
@@ -90,7 +98,8 @@ class Material(ABC):
                             shock_velocity=shock_velocity,
                             volume=current_volume,
                             compression_ratio=compression_ratio,
-                            hugoniot=hugoniot)
+                            hugoniot=hugoniot,
+                            isentrope=isentrope)
 
     @staticmethod
     def _upsample_coords(coord_list):
