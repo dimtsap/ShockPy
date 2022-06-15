@@ -25,7 +25,7 @@ class ShockWaveExperiment:
 
     def run_experiment(self, shock_pressure: float, std=None):
         if std is not None:
-            pressures_range = np.linspace((1-0.06)*shock_pressure, (1+0.06)*shock_pressure, num=5).tolist()
+            pressures_range = np.linspace((1-2*std)*shock_pressure, (1+2*std)*shock_pressure, num=5).tolist()
         else:
             pressures_range = [shock_pressure]
         release_isentropes=[]

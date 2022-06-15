@@ -7,8 +7,8 @@ from shock_wave_compression.ShockWaveExperiment import ShockWaveExperiment
 
 shock_pressure = 200  # GPa
 
-experiment = ShockWaveExperiment(materials=[Kapton(), MgO(is_stochastic=True), Quartz(is_stochastic=True)])
+experiment = ShockWaveExperiment(materials=[Kapton(), MgO(is_stochastic=False), Quartz(is_stochastic=False)])
 
-experiment.run_experiment(shock_pressure, std=0.03)
+experiment.run_experiment(shock_pressure)
 
 experiment.plot()
