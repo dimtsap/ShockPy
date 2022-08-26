@@ -1,0 +1,7 @@
+UQpy
+numpy
+matplotlib
+pandas
+seaborn
+scipy
+shapely
