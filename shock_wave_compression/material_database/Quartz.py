@@ -7,6 +7,8 @@ from shock_wave_compression.material_states.Hugoniot import Hugoniot
 import os
 import pickle
 
+from shock_wave_compression.material_states.Isentrope import Isentrope
+
 
 class Quartz(Material):
 

@@ -6,6 +6,8 @@ from shock_wave_compression.material_database.baseclass.Material import Material
 from shock_wave_compression.material_states.Hugoniot import Hugoniot
 import pickle
 
+from shock_wave_compression.material_states.Isentrope import Isentrope
+
 
 class MgO(Material):
 
@@ -22,5 +24,5 @@ class MgO(Material):
             self.hugoniots_list = [self.nominal_hugoniot]
 
     def analytical_shock_velocity_equation(self, parameters, hugoniot_particle_velocity):
-        return parameters[0] + parameters[1] * hugoniot_particle_velocity +parameters[2] * np.square(
+        return parameters[0] + parameters[1] * hugoniot_particle_velocity + parameters[2] * np.square(
             hugoniot_particle_velocity)
