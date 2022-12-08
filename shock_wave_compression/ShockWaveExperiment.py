@@ -35,6 +35,13 @@ class ShockWaveExperiment:
         for index_material in range(1, self.n_materials):
             material_i = self.materials[index_material]
 
+            import matplotlib.pyplot as plt
+            plt.plot(material_i.hugoniots_list[0].particle_velocities, material_i.hugoniots_list[0].pressures)
+            plt.plot(np.squeeze(release_isentropes[0].particle_velocities), np.squeeze(release_isentropes[0].pressures))
+            plt.xlim((4, 12))
+            plt.ylim((0, 700))
+            plt.show()
+
             new_material_isentropes = []
             for isentrope in release_isentropes:
                 new_material_isentropes.extend(material_i.hugoniots_intersection_with_isentrope(isentrope))

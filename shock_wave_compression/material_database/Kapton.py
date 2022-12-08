@@ -22,14 +22,14 @@ class Kapton(Material):
 
     def calculate_isentrope(self, hugoniot, intersection):
         isentrope = super().calculate_isentrope(hugoniot, intersection)
-        f = interpolate.interp1d(isentrope.particle_velocities[0, 1:],
-                                 isentrope.pressures[0, 1:],
-                                 kind='slinear', fill_value='extrapolate')
-        release_kapton_up = np.linspace(2, 15)
-        release_kapton_p = f(release_kapton_up)
-
-        isentrope.pressures = np.atleast_2d(release_kapton_p)
-        isentrope.particle_velocities = np.atleast_2d(release_kapton_up)
+        # f = interpolate.interp1d(isentrope.particle_velocities[0, 1:],
+        #                          isentrope.pressures[0, 1:],
+        #                          kind='slinear', fill_value='extrapolate')
+        # release_kapton_up = np.linspace(2, 15)
+        # release_kapton_p = f(release_kapton_up)
+        #
+        # isentrope.pressures = np.atleast_2d(release_kapton_p)
+        # isentrope.particle_velocities = np.atleast_2d(release_kapton_up)
         return isentrope
 
     def analytical_shock_velocity_equation(self, parameters, hugoniot_particle_velocity):

@@ -35,6 +35,7 @@ class Material(ABC):
         release_pressures = []
         release_particle_velocities = []
         for (volume_Hugoniot, pressure_Hugoniot) in zip([volumesList], [pressuresList]):
+            # V = np.linspace(0.01, intersection.volume, num=1000)
             V = np.linspace(intersection.volume, max(volume_Hugoniot), num=1000)
 
             S = 1.31867  # What is this parameter.? Is it material dependent.?
