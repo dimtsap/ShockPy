@@ -17,7 +17,7 @@ class MgO(Material):
             data = pickle.load(input_file)
         self.nominal_hugoniot = self.calculate_hugoniot(np.array([6.6161, 1.4111, -0.016277]))
         if is_stochastic:
-            self.hugoniots_list = [self.calculate_hugoniot(x) for x in data[:1000:100]]
+            self.hugoniots_list = [self.calculate_hugoniot(x) for x in data[:1000:10]]
         else:
             self.hugoniots_list = [self.nominal_hugoniot]
 
