@@ -35,13 +35,6 @@ class ShockWaveExperiment:
         for index_material in range(1, self.n_materials):
             material_i = self.materials[index_material]
 
-            import matplotlib.pyplot as plt
-            plt.plot(material_i.hugoniots_list[0].particle_velocities, material_i.hugoniots_list[0].pressures)
-            plt.plot(np.squeeze(release_isentropes[0].particle_velocities), np.squeeze(release_isentropes[0].pressures))
-            plt.xlim((4, 12))
-            plt.ylim((0, 700))
-            plt.show()
-
             new_material_isentropes = []
             for isentrope in release_isentropes:
                 new_material_isentropes.extend(material_i.hugoniots_intersection_with_isentrope(isentrope))
@@ -51,9 +44,11 @@ class ShockWaveExperiment:
         self.final_isentropes = release_isentropes
 
     def plot(self):
-        fig, ax = plt.subplots(1, 1)
+        plt.style.use('science')
+
+        fig, ax = plt.subplots(1, 1, figsize=(8, 6))
         for final_isentrope in self.final_isentropes:
-            index_material = len(self.materials)-1
+            index_material = len(self.materials) - 1
             self._plot_intersection(final_isentrope.intersection, index_material, ax)
             # self._plot_isentrope(isentrope=final_isentrope, index_material=index_material, ax=ax)
         for index_material in range(self.n_materials):
@@ -61,17 +56,20 @@ class ShockWaveExperiment:
             if material.is_stochastic:
                 for index_hugoniot in range(len(material.hugoniots_list)):
                     hugoniot = material.hugoniots_list[index_hugoniot]
-                    plt.plot(hugoniot.particle_velocities, hugoniot.pressures, color='gray', zorder=0)
+                    plt.plot(hugoniot.particle_velocities, hugoniot.pressures, color='gray', linewidth=2, zorder=0)
             plt.plot(material.nominal_hugoniot.particle_velocities,
                      material.nominal_hugoniot.pressures, color=self._palette[index_material],
-                     label=material.__class__.__name__ + " Hugoniot",zorder=1)
+                     label=material.__class__.__name__ + " Hugoniot", linewidth=2, zorder=1)
 
         plt.xlim((4, 12))
         plt.ylim((0, 700))
-        plt.legend()
-        plt.ylabel("Pressure (GPa)")
-        plt.xlabel("Particle Velocity (km/s)")
+        plt.legend(prop={'size': 16}, loc='upper left')
+        plt.ylabel("Pressure (GPa)", fontsize=18)
+        plt.xlabel("Particle Velocity (km/s)", fontsize=18)
+        plt.xticks(fontsize=14)
+        plt.yticks(fontsize=14)
         plt.savefig("uncertain_shockwave.png")
+        plt.show()
 
     def _plot_isentrope(self, isentrope, index_material, ax):
         ax.plot(np.squeeze(isentrope.particle_velocities),

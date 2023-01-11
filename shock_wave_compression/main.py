@@ -12,3 +12,4 @@ experiment = ShockWaveExperiment(materials=[Kapton(), MgO(is_stochastic=False), 
 experiment.run_experiment(shock_pressure)
 
 experiment.plot()
+
