@@ -10,11 +10,11 @@ from shock_wave_compression.ShockWaveExperiment import ShockWaveExperiment
 
 shock_pressure = 200  # GPa
 
-experiment = ShockWaveExperiment(materials=[Kapton(), MgO(is_stochastic=False), Quartz(is_stochastic=False)])
+experiment = ShockWaveExperiment(materials=[Kapton(), MgO(is_stochastic=True), Quartz(is_stochastic=True)])
 
-experiment.run_experiment(shock_pressure)
+experiment.run_experiment(shock_pressure, std=0.01)
 
-experiment.plot()
+# experiment.plot()
 
 
 window_intersections = np.array(
