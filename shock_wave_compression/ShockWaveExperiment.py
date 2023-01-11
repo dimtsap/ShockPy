@@ -59,7 +59,7 @@ class ShockWaveExperiment:
         for index_material in range(self.n_materials):
             material = self.materials[index_material]
             if material.is_stochastic:
-                for index_hugoniot in range(0, len(material.hugoniots_list)):
+                for index_hugoniot in range(len(material.hugoniots_list)):
                     hugoniot = material.hugoniots_list[index_hugoniot]
                     plt.plot(hugoniot.particle_velocities, hugoniot.pressures, color='gray', zorder=0)
             plt.plot(material.nominal_hugoniot.particle_velocities,
