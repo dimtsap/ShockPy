@@ -12,9 +12,9 @@ shock_pressure = 200  # GPa
 
 experiment = ShockWaveExperiment(materials=[Kapton(), MgO(is_stochastic=True), Quartz(is_stochastic=True)])
 
-experiment.run_experiment(shock_pressure, std=0.01)
+experiment.run_experiment(shock_pressure, std=0.05)
 
-# experiment.plot()
+experiment.plot()
 
 
 window_intersections = np.array(
