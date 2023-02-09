@@ -14,7 +14,7 @@ experiment = ShockWaveExperiment(materials=[Kapton(), MgO(is_stochastic=True), Q
 
 experiment.run_experiment(shock_pressure, std=0.05)
 
-experiment.plot()
+# experiment.plot()
 
 
 window_intersections = np.array(
@@ -28,4 +28,5 @@ df = pd.DataFrame(window_intersections, columns=['Particle Velocity (km/s)', 'Pr
 sns.displot(data=df, x="Particle Velocity (km/s)", kind="kde")
 sns.displot(data=df, x="Pressure (GPa)", kind="kde")
 sns.displot(df, x="Particle Velocity (km/s)", y="Pressure (GPa)", kind='kde')
+plt.show()
 a=1

@@ -25,8 +25,8 @@ class ShockWaveExperiment:
 
     def run_experiment(self, shock_pressure: float, std=None):
         if std is not None:
-            # pressures_range = 2*1.96*std*shock_pressure+np.random.rand(20)+(shock_pressure-1.96*std*shock_pressure)
-            # pressures_range = std*shock_pressure+np.random.randn(10)+shock_pressure
+            # pressures_range = 2*1.96*std*shock_pressure+np.random.rand(100)+(shock_pressure-1.96*std*shock_pressure)
+            # pressures_range = std*shock_pressure+np.random.randn(100)+shock_pressure
             pressures_range = np.linspace((1-2*std)*shock_pressure, (1+2*std)*shock_pressure, num=100).tolist()
         else:
             pressures_range = [shock_pressure]
