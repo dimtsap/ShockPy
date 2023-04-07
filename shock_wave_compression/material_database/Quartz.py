@@ -22,7 +22,7 @@ class Quartz(Material):
         # self.nominal_hugoniot = self.calculate_hugoniot(np.array([1.754, 1.862, -3.364e-2, 5.666e-4])) # polynomial hugoniot
         self.nominal_hugoniot = self.calculate_hugoniot(np.array([6.278, 1.193, -2.505, -0.3701]))  # exponential hugoniot
         if is_stochastic:
-            self.hugoniots_list = self.hugoniots_list = [self.calculate_hugoniot(x) for x in data[:1000:10]]
+            self.hugoniots_list = self.hugoniots_list = [self.calculate_hugoniot(x) for x in data[:1000]]
         else:
             self.hugoniots_list = [self.nominal_hugoniot]
 

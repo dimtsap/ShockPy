@@ -23,17 +23,19 @@ class ShockWaveExperiment:
         # manipulate h, l, s values and return as rgb
         return colorsys.hls_to_rgb(h, min(1, l * scale_l), s=s)
 
-    def run_experiment(self, shock_pressure: float, std=None):
+    def run_experiment(self, shock_pressure: float, std=None, initial_points=1000):
         if std is not None:
-            # pressures_range = 2*1.96*std*shock_pressure+np.random.rand(20)+(shock_pressure-1.96*std*shock_pressure)
-            # pressures_range = std*shock_pressure+np.random.randn(10)+shock_pressure
-            pressures_range = np.linspace((1 - 1.96 * std) * shock_pressure, (1 + 1.96 * std) * shock_pressure,
-                                          num=20).tolist()
+            # pressures_range = 2*1.96*std*shock_pressure*np.random.rand(initial_points)+(shock_pressure-1.96*std*shock_pressure)
+            pressures_range = std*shock_pressure*np.random.randn(initial_points)+shock_pressure
+            # pressures_range = np.linspace((1 - 1.96 * std) * shock_pressure, (1 + 1.96 * std) * shock_pressure,
+            #                               num=initial_points).tolist()
         else:
             pressures_range = [shock_pressure]
         release_isentropes = []
         for pressure in pressures_range:
             release_isentropes.extend(self.materials[0].release_isentropes_at_pressure(pressure))
+        random_isentropes_1K = list(np.random.randint(0, len(release_isentropes), size=500))
+        release_isentropes=[random_isentropes_1K[index] for index in random_isentropes_1K]
         for index_material in range(1, self.n_materials):
             material_i = self.materials[index_material]
 
@@ -41,7 +43,8 @@ class ShockWaveExperiment:
             for isentrope in release_isentropes:
                 new_material_isentropes.extend(material_i.hugoniots_intersection_with_isentrope(isentrope))
 
-            release_isentropes = new_material_isentropes
+            random_isentropes_1K=list(np.random.randint(0,len(new_material_isentropes), size=500))
+            release_isentropes = [new_material_isentropes[index] for index in random_isentropes_1K]
 
         self.final_isentropes = release_isentropes
 
@@ -70,8 +73,9 @@ class ShockWaveExperiment:
         plt.xlabel("Particle Velocity (km/s)", fontsize=18)
         plt.xticks(fontsize=14)
         plt.yticks(fontsize=14)
-        plt.savefig("uncertain_shockwave.png")
-        plt.show()
+        import datetime
+        plt.savefig(f"uncertain_shockwave_{datetime.datetime.now()}.png")
+        # plt.show()
 
     def _plot_isentrope(self, isentrope, index_material, ax):
         ax.plot(np.squeeze(isentrope.particle_velocities),

@@ -23,29 +23,32 @@ class BackwardPropagationFromWindow:
         # manipulate h, l, s values and return as rgb
         return colorsys.hls_to_rgb(h, min(1, l * scale_l), s=s)
 
-    def propagate(self, measured_pressure: float, std=None):
+    def propagate(self, measured_pressure: float, std=None, initial_points=1000):
         if std is not None:
-            # pressures_range = 2*1.96*std*measured_pressure+np.random.rand(20)+(measured_pressure-1.96*std*measured_pressure)
-            pressures_range = std*measured_pressure+np.random.randn(20)+measured_pressure
-            # pressures_range = np.linspace((1 - 2 * std) * measured_pressure,
-            #                               (1 + 2 * std) * measured_pressure, num=20) \
-            #     .tolist()
+            # pressures_range = 2*1.96*std*measured_pressure*np.random.rand(initial_points)+(measured_pressure-1.96*std*measured_pressure)
+            pressures_range = std * measured_pressure * np.random.randn(initial_points) + measured_pressure
+            # pressures_range = np.linspace((1 - 1.96 * std) * measured_pressure, (1 + 1.96 * std) * measured_pressure,
+            #                               num=initial_points).tolist()
         else:
             pressures_range = [measured_pressure]
 
         intersections = []
-        for pressure in pressures_range:
+        for index_pressure, pressure in enumerate(pressures_range):
+            print(f'Material: Quartz, pressure: {index_pressure}')
             intersections.extend(self.materials[-1].intersections_at_pressure(pressure))
 
         for index_material in range(self.n_materials - 2, -1, -1):
+            previous_material_intersections = intersections
+            intersections_1K = list(np.random.randint(0, len(previous_material_intersections), size=1000))
+            previous_material_intersections = [previous_material_intersections[index] for index in intersections_1K]
             material_i = self.materials[index_material]
-            previous_material_intersections = []
-            for intersection in intersections:
-                previous_material_intersections.extend(material_i.find_hugoniots_from_next_intersection(intersection))
+            current_material_intersections = []
+            for index_intersection, intersection in enumerate(previous_material_intersections):
+                print(f'Material: {material_i.__class__}, intersection: {index_intersection}')
+                current_material_intersections.extend(material_i.find_hugoniots_from_next_intersection(intersection))
+            previous_material_intersections = current_material_intersections
 
-            intersections = previous_material_intersections
-
-        self.initial_intersections = intersections
+        self.initial_intersections = previous_material_intersections
 
     def plot(self):
         plt.style.use('science')
@@ -61,7 +64,7 @@ class BackwardPropagationFromWindow:
                     plt.plot(hugoniot.particle_velocities, hugoniot.pressures, color='gray', linewidth=2, zorder=0)
             plt.plot(material.nominal_hugoniot.particle_velocities,
                      material.nominal_hugoniot.pressures, color=self._palette[index_material],
-                     label=material.__class__.__name__ + " Hugoniot",linewidth=2, zorder=1)
+                     label=material.__class__.__name__ + " Hugoniot", linewidth=2, zorder=1)
 
         plt.xlim((4, 12))
         plt.ylim((0, 700))
