@@ -34,8 +34,8 @@ class ShockWaveExperiment:
         release_isentropes = []
         for pressure in pressures_range:
             release_isentropes.extend(self.materials[0].release_isentropes_at_pressure(pressure))
-        random_isentropes_1K = list(np.random.randint(0, len(release_isentropes), size=500))
-        release_isentropes=[random_isentropes_1K[index] for index in random_isentropes_1K]
+        # random_isentropes_1K = list(np.random.randint(0, len(release_isentropes), size=500))
+        # release_isentropes=[random_isentropes_1K[index] for index in random_isentropes_1K]
         for index_material in range(1, self.n_materials):
             material_i = self.materials[index_material]
 
@@ -43,8 +43,9 @@ class ShockWaveExperiment:
             for isentrope in release_isentropes:
                 new_material_isentropes.extend(material_i.hugoniots_intersection_with_isentrope(isentrope))
 
-            random_isentropes_1K=list(np.random.randint(0,len(new_material_isentropes), size=500))
-            release_isentropes = [new_material_isentropes[index] for index in random_isentropes_1K]
+            # random_isentropes_1K=list(np.random.randint(0,len(new_material_isentropes), size=500))
+            # release_isentropes = [new_material_isentropes[index] for index in random_isentropes_1K]
+            release_isentropes=new_material_isentropes
 
         self.final_isentropes = release_isentropes
 
@@ -66,16 +67,24 @@ class ShockWaveExperiment:
                      material.nominal_hugoniot.pressures, color=self._palette[index_material],
                      label=material.__class__.__name__ + " Hugoniot",linewidth=2, zorder=1)
 
-        plt.xlim((4, 12))
+        plt.xlim((0, 12))
         plt.ylim((0, 700))
         plt.legend(prop={'size': 16}, loc='upper left')
         plt.ylabel("Pressure (GPa)", fontsize=18)
         plt.xlabel("Particle Velocity (km/s)", fontsize=18)
         plt.xticks(fontsize=14)
         plt.yticks(fontsize=14)
+        hyades_up = [4.54, 2.32, 2.88]
+        hyades_p = [211.39, 373.47, 304.85]
+        plt.axhline(y=211.39, color='r', linestyle='-')
+        plt.axhline(y=373.47, color='r', linestyle='-')
+        plt.axhline(y=304.85, color='r', linestyle='-')
+        plt.scatter(x=hyades_up, y=hyades_p, c='black', marker='*')
+        plt.scatter(x=[x + 9.62-4.54 for x in hyades_up], y=hyades_p, c='black', marker='x')
+
         import datetime
         plt.savefig(f"uncertain_shockwave_{datetime.datetime.now()}.png")
-        # plt.show()
+        plt.show()
 
     def _plot_isentrope(self, isentrope, index_material, ax):
         ax.plot(np.squeeze(isentrope.particle_velocities),
