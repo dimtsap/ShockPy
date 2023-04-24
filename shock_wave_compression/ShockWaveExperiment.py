@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from shock_wave_compression.material_database.baseclass.Material import Material
 import numpy as np
 import seaborn as sns
@@ -69,21 +71,17 @@ class ShockWaveExperiment:
 
         plt.xlim((0, 12))
         plt.ylim((0, 700))
-        plt.legend(prop={'size': 16}, loc='upper left')
         plt.ylabel("Pressure (GPa)", fontsize=18)
         plt.xlabel("Particle Velocity (km/s)", fontsize=18)
         plt.xticks(fontsize=14)
         plt.yticks(fontsize=14)
-        hyades_up = [4.54, 2.32, 2.88]
+        hyades_up = [9.65, 6.81, 8.15]
         hyades_p = [211.39, 373.47, 304.85]
-        plt.axhline(y=211.39, color='r', linestyle='-')
-        plt.axhline(y=373.47, color='r', linestyle='-')
-        plt.axhline(y=304.85, color='r', linestyle='-')
-        plt.scatter(x=hyades_up, y=hyades_p, c='black', marker='*')
-        plt.scatter(x=[x + 9.62-4.54 for x in hyades_up], y=hyades_p, c='black', marker='x')
-
-        import datetime
-        plt.savefig(f"uncertain_shockwave_{datetime.datetime.now()}.png")
+        plt.scatter(x=hyades_up[0], y=hyades_p[0], c=self._palette[0], marker='*', label='HYADES Kapton point', s=80)
+        plt.scatter(x=hyades_up[1], y=hyades_p[1], c=self._palette[1], marker='*', label='HYADES MgO point', s=80)
+        plt.scatter(x=hyades_up[2], y=hyades_p[2], c=self._palette[2], marker='*', label='HYADES Quartz point', s=80)
+        plt.legend(prop={'size': 16}, loc='upper left')
+        plt.savefig(f"uncertain_shockwave_{datetime.now()}.png")
         plt.show()
 
     def _plot_isentrope(self, isentrope, index_material, ax):
