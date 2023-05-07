@@ -17,6 +17,7 @@ class ShockWaveExperiment:
         self._very_light_palette = [ShockWaveExperiment._scale_lightness(color, 1.8) for color in self._palette]
         self._lighter_palette = [ShockWaveExperiment._scale_lightness(color, 1.5) for color in self._palette]
         self._darker_palette = [ShockWaveExperiment._scale_lightness(color, 0.5) for color in self._palette]
+        self._very_dark_palette = [ShockWaveExperiment._scale_lightness(color, 0.1) for color in self._palette]
 
     @staticmethod
     def _scale_lightness(rgb, scale_l):
@@ -36,8 +37,8 @@ class ShockWaveExperiment:
         release_isentropes = []
         for pressure in pressures_range:
             release_isentropes.extend(self.materials[0].release_isentropes_at_pressure(pressure))
-        # random_isentropes_1K = list(np.random.randint(0, len(release_isentropes), size=500))
-        # release_isentropes=[random_isentropes_1K[index] for index in random_isentropes_1K]
+        # random_isentropes_1K = list(np.random.randint(0, len(release_isentropes), size=1000))
+        # release_isentropes=[release_isentropes[index] for index in random_isentropes_1K]
         for index_material in range(1, self.n_materials):
             material_i = self.materials[index_material]
 
@@ -45,9 +46,9 @@ class ShockWaveExperiment:
             for isentrope in release_isentropes:
                 new_material_isentropes.extend(material_i.hugoniots_intersection_with_isentrope(isentrope))
 
-            # random_isentropes_1K=list(np.random.randint(0,len(new_material_isentropes), size=500))
-            # release_isentropes = [new_material_isentropes[index] for index in random_isentropes_1K]
-            release_isentropes=new_material_isentropes
+            random_isentropes_1K=list(np.random.randint(0,len(new_material_isentropes), size=1000))
+            release_isentropes = [new_material_isentropes[index] for index in random_isentropes_1K]
+            # release_isentropes=new_material_isentropes
 
         self.final_isentropes = release_isentropes
 
@@ -77,9 +78,9 @@ class ShockWaveExperiment:
         plt.yticks(fontsize=14)
         hyades_up = [9.65, 6.81, 8.15]
         hyades_p = [211.39, 373.47, 304.85]
-        plt.scatter(x=hyades_up[0], y=hyades_p[0], c=self._palette[0], marker='*', label='HYADES Kapton point', s=80)
-        plt.scatter(x=hyades_up[1], y=hyades_p[1], c=self._palette[1], marker='*', label='HYADES MgO point', s=80)
-        plt.scatter(x=hyades_up[2], y=hyades_p[2], c=self._palette[2], marker='*', label='HYADES Quartz point', s=80)
+        plt.scatter(x=hyades_up[0], y=hyades_p[0], color=self._very_dark_palette[0], marker='*', label='HYADES Kapton point', s=160, zorder=1e6)
+        plt.scatter(x=hyades_up[1], y=hyades_p[1], color=self._very_dark_palette[1], marker='*', label='HYADES MgO point', s=160, zorder=1e6)
+        plt.scatter(x=hyades_up[2], y=hyades_p[2], color=self._very_dark_palette[2], marker='*', label='HYADES Quartz point', s=160, zorder=1e6)
         plt.legend(prop={'size': 16}, loc='upper left')
         plt.savefig(f"uncertain_shockwave_{datetime.now()}.png")
         plt.show()
