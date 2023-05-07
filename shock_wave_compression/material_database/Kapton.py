@@ -13,6 +13,7 @@ class Kapton(Material):
                  initial_density: float = 1.33):  # Source https://dielectricmfg.com/knowledge-base/kapton/
         super().__init__(1.1, initial_density)
         hugoniot_P_up = np.loadtxt(os.path.join(os.getcwd(), "material_database", "data", "kapton_hugoniot.txt"))
+        
         p = hugoniot_P_up[:, 0]
         up = hugoniot_P_up[:, 1]
         us = p / (self.initial_density * up)
@@ -22,6 +23,9 @@ class Kapton(Material):
 
     def calculate_isentrope(self, hugoniot, intersection):
         isentrope = super().calculate_isentrope(hugoniot, intersection)
+        import matplotlib.pyplot as plt
+        plt.plot(isentrope.particle_velocities[0, 1:], isentrope.pressures[0, 1:])
+        plt.show()
         f = interpolate.interp1d(isentrope.particle_velocities[0, 1:],
                                  isentrope.pressures[0, 1:],
                                  kind='slinear', fill_value='extrapolate')
