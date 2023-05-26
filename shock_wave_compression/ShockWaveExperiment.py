@@ -25,17 +25,14 @@ class ShockWaveExperiment:
         # manipulate h, l, s values and return as rgb
         return colorsys.hls_to_rgb(h, min(1, l * scale_l), s=s)
 
-    def run_experiment(self, shock_pressure: float, std=None):
+    def run_experiment(self, shock_pressure: float, std=None, initial_points=500):
         if std is not None:
-            # pressures_range = 2*1.96*std*shock_pressure+np.random.rand(100)+(shock_pressure-1.96*std*shock_pressure)
-            # pressures_range = std*shock_pressure+np.random.randn(100)+shock_pressure
-            pressures_range = np.linspace((1-2*std)*shock_pressure, (1+2*std)*shock_pressure, num=100).tolist()
+            pressures_range = std * shock_pressure * np.random.randn(initial_points) + shock_pressure
         else:
             pressures_range = [shock_pressure]
-        release_isentropes=[]
+        release_isentropes = []
         for pressure in pressures_range:
             release_isentropes.extend(self.materials[0].release_isentropes_at_pressure(pressure))
-        # release_isentropes =
         for index_material in range(1, self.n_materials):
             material_i = self.materials[index_material]
 
@@ -43,7 +40,9 @@ class ShockWaveExperiment:
             for isentrope in release_isentropes:
                 new_material_isentropes.extend(material_i.hugoniots_intersection_with_isentrope(isentrope))
 
-            release_isentropes = new_material_isentropes
+            random_isentropes_1K = list(np.random.randint(0, len(new_material_isentropes), size=500))
+            release_isentropes = [new_material_isentropes[index] for index in random_isentropes_1K]
+            # release_isentropes = new_material_isentropes
 
         self.final_isentropes = release_isentropes
 
@@ -78,9 +77,12 @@ class ShockWaveExperiment:
         # plt.axhline(y=211.39, color='r', linestyle='-')
         # plt.axhline(y=373.47, color='r', linestyle='-')
         # plt.axhline(y=304.85, color='r', linestyle='-')
-        plt.scatter(x=hyades_up[0], y=hyades_p[0], c=self._palette[0], marker='*', label='HYADES Kapton point', s=80)
-        plt.scatter(x=hyades_up[1], y=hyades_p[1], c=self._palette[1], marker='*', label='HYADES MgO point', s=80)
-        plt.scatter(x=hyades_up[2], y=hyades_p[2], c=self._palette[2], marker='*', label='HYADES Quartz point', s=80)
+        plt.scatter(x=hyades_up[0], y=hyades_p[0], color="black", marker='*', label='HYADES Kapton point', s=160,
+                    zorder=1e6)
+        plt.scatter(x=hyades_up[1], y=hyades_p[1], color="black", marker='*', label='HYADES MgO point', s=160,
+                    zorder=1e6)
+        plt.scatter(x=hyades_up[2], y=hyades_p[2], color="black", marker='*', label='HYADES Quartz point', s=160,
+                    zorder=1e6)
         # plt.scatter(x=hyades_up, y=hyades_p, c='black', marker='*')
         # plt.scatter(x=[x + 9.33 - 4.54 for x in hyades_up], y=hyades_p, c='black', marker='x')
         plt.legend(prop={'size': 16}, loc='upper left')
@@ -90,13 +92,13 @@ class ShockWaveExperiment:
     def _plot_isentrope(self, isentrope, index_material, ax):
         ax.plot(np.squeeze(isentrope.particle_velocities),
                 np.squeeze(isentrope.pressures),
-                  color=self._lighter_palette[index_material], linestyle='dashed', zorder=1)
+                color=self._lighter_palette[index_material], linestyle='dashed', zorder=1)
         if isentrope.intersection is not None:
             self._plot_intersection(isentrope.intersection, index_material=index_material, ax=ax)
 
     def _plot_intersection(self, intersection, index_material, ax):
         ax.scatter(intersection.particle_velocity, intersection.pressure,
-                     color=self._darker_palette[index_material], zorder=2)
+                   color=self._darker_palette[index_material], zorder=2)
         if intersection.isentrope is not None:
             index_material -= 1
             self._plot_isentrope(intersection.isentrope, index_material, ax=ax)
