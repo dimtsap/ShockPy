@@ -34,7 +34,8 @@ class Material(ABC):
         volumesList = hugoniot.volumes.tolist()
         release_pressures = []
         release_particle_velocities = []
-        V = np.linspace(intersection.volume, max(volumesList), num=1000)
+        # V = np.linspace(intersection.volume, max(volumesList), num=1000)
+        V = np.linspace(intersection.volume, 0.001, num=1000)
         hugoniot_interpolator = interpolate.interp1d(np.flip(np.array(volumesList)), np.flip(np.array(pressuresList)),
                                                      kind='cubic',
                                                      fill_value="extrapolate")
@@ -80,7 +81,7 @@ class Material(ABC):
                          intersection=intersection)
 
     def calculate_intersection(self, hugoniot, isentrope):
-        # import matplotlib.pyplot as plt
+        import matplotlib.pyplot as plt
         # plt.figure()
         # plt.plot(hugoniot.particle_velocities, hugoniot.pressures)
         # plt.plot(np.squeeze(isentrope.particle_velocities), np.squeeze(isentrope.pressures))
@@ -120,8 +121,21 @@ class Material(ABC):
             isentropes.append(release_isentrope)
         return isentropes
 
+    def _find_hugoniot_point_at_shock_velocity(self, hugoniot: Hugoniot, shock_velocity: float):
+        self.Gamma_eff = 0.619*(1-np.exp(-0.0882*(shock_velocity-12.0922) ** 1.5))
+        particle_velocity=hugoniot.interpolate_shock_velocity(shock_velocity)
+        current_density = self.initial_density * shock_velocity / (
+                shock_velocity - particle_velocity)
+        current_volume = 1 / current_density
+        compression_ratio = self.initial_volume / current_volume
+        pressure = hugoniot.interpolate_particle_velocity(particle_velocity)
+        return Intersection(pressure=pressure, particle_velocity=particle_velocity,
+                            shock_velocity=shock_velocity, volume=current_volume,
+                            compression_ratio=compression_ratio,
+                            hugoniot=hugoniot)
+
     def _find_hugoniot_point_at_pressure(self, hugoniot: Hugoniot, pressure: float):
-        particle_velocity = hugoniot.interpolate(pressure)
+        particle_velocity = hugoniot.interpolate_pressure(pressure)
         shock_velocity = pressure / (self.initial_density * particle_velocity)  # P=rho0*Us*up
         current_density = self.initial_density * shock_velocity / (
                 shock_velocity - particle_velocity)  # rho0*Us=rho1*(Us-up)
@@ -145,7 +159,7 @@ class Material(ABC):
         pass
 
     def calculate_hugoniot(self, parameters):
-        hugoniot_particle_velocity = np.linspace(0, 20, num=1000)
+        hugoniot_particle_velocity = np.linspace(0, 30, num=1000)
         hugoniot_shock_velocity = self.analytical_shock_velocity_equation(parameters, hugoniot_particle_velocity)
         hugoniot_pressure = self.initial_density * hugoniot_shock_velocity * hugoniot_particle_velocity
         hugoniot_volume = self.initial_volume * (

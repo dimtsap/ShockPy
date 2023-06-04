@@ -8,18 +8,26 @@ import pandas as pd
 
 from shock_wave_compression.ShockWaveExperiment import ShockWaveExperiment
 
-shock_pressure = 211.39  # GPa
-
-experiment = ShockWaveExperiment(materials=[Kapton(), MgO(is_stochastic=False), Quartz(is_stochastic=False)])
+quartz=Quartz(is_stochastic=False)
+intersection = quartz._find_hugoniot_point_at_shock_velocity(quartz.nominal_hugoniot, 24.50)
+# shock_pressure = 211.39  # GPa
+shock_pressure = intersection.pressure
+experiment = ShockWaveExperiment(materials=[quartz, MgO(is_stochastic=False)])
 
 experiment.run_experiment(shock_pressure)
 
-experiment.plot()
+# experiment.plot()
 
+window_points = [isentrope.intersection for isentrope in experiment.final_isentropes]
+mgo_isentrope = [point.isentrope for point in window_points]
+mgo_intersections = np.array(
+    [(isentrope.intersection.particle_velocity, isentrope.intersection.pressure) for isentrope in
+     mgo_isentrope])
 
 window_intersections = np.array(
     [(isentrope.intersection.particle_velocity, isentrope.intersection.pressure) for isentrope in
      experiment.final_isentropes])
+gamma_eff = quartz.Gamma_eff
 mean_window_pressure = np.mean(window_intersections[:, 1], dtype=np.float64)
 std_window_pressure = np.std(window_intersections[:, 1], dtype=np.float64)
 print(f"Mean window pressure:{mean_window_pressure}")

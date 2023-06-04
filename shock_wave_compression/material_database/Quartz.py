@@ -10,7 +10,7 @@ import pickle
 
 class Quartz(Material):
 
-    def __init__(self, gamma_eff: float = 1.1,
+    def __init__(self, gamma_eff: float = 0.6,
                  initial_density: float = 2.65,
                  is_stochastic=False):
         super().__init__(gamma_eff, initial_density, is_stochastic)
@@ -27,3 +27,7 @@ class Quartz(Material):
     def analytical_shock_velocity_equation(self, parameters, hugoniot_particle_velocity):
         return np.array([parameters[0] + parameters[1] * x + parameters[2] * x * math.exp(parameters[3] * x)
                          for x in hugoniot_particle_velocity])
+    #
+    # def _find_hugoniot_point_at_shock_velocity(self, hugoniot: Hugoniot, shock_velocity: float):
+    #     self.Gamma_eff = 0.619 * (1 - np.exp(-0.0882 * (shock_velocity - 12.0922) ** 1.5))
+    #     super()._find_hugoniot_point_at_shock_velocity(hugoniot, shock_velocity)
