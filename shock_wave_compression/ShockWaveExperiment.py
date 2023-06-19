@@ -25,11 +25,12 @@ class ShockWaveExperiment:
         # manipulate h, l, s values and return as rgb
         return colorsys.hls_to_rgb(h, min(1, l * scale_l), s=s)
 
-    def run_experiment(self, shock_pressure: float, std=None, initial_points=500):
-        if std is not None:
-            pressures_range = std * shock_pressure * np.random.randn(initial_points) + shock_pressure
-        else:
-            pressures_range = [shock_pressure]
+    def run_experiment(self, shock_pressure: float,
+                       cov=None, initial_points: int = 500,
+                       nrandom_isentropes_per_material: int = None):
+        pressures_range = [shock_pressure] if cov is None else \
+            cov * shock_pressure * np.random.randn(initial_points) + shock_pressure
+
         release_isentropes = []
         for pressure in pressures_range:
             release_isentropes.extend(self.materials[0].release_isentropes_at_pressure(pressure))
@@ -40,9 +41,10 @@ class ShockWaveExperiment:
             for isentrope in release_isentropes:
                 new_material_isentropes.extend(material_i.hugoniots_intersection_with_isentrope(isentrope))
 
-            random_isentropes_1K = list(np.random.randint(0, len(new_material_isentropes), size=500))
-            release_isentropes = [new_material_isentropes[index] for index in random_isentropes_1K]
-            # release_isentropes = new_material_isentropes
+            release_isentropes = new_material_isentropes if nrandom_isentropes_per_material is None \
+                else [new_material_isentropes[index] for index in
+                      list(np.random.randint(0, len(new_material_isentropes),
+                                             size=nrandom_isentropes_per_material))]
 
         self.final_isentropes = release_isentropes
 
