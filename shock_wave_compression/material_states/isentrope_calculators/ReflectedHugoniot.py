@@ -1,3 +1,5 @@
+from shock_wave_compression.material_states.Hugoniot import Hugoniot
+from shock_wave_compression.material_states.Intersection import Intersection
 from shock_wave_compression.material_states.Isentrope import Isentrope
 
 
@@ -11,4 +13,24 @@ class ReflectedHugoniot:
             pressures=hugoniot.pressures,
             particle_velocities=reflected_hugoniot_particle_velocities,
             intersection=intersection,
+        )
+
+    def find_previous_material_isentrope(self,
+                                         previous_material_hugoniot,
+                                         current_material_intersection,
+                                         previous_material_density):
+        negative_hugoniot = previous_material_hugoniot.reflected_hugoniot(previous_material_density)
+        negative_hugoniot_intersection = \
+            negative_hugoniot.find_hugoniot_point_at_pressure(current_material_intersection.pressure,
+                                                              previous_material_density)
+        delta_particle_velocity = current_material_intersection.particle_velocity - \
+                                  negative_hugoniot_intersection.particle_velocity
+        reflected_hugoniot = previous_material_hugoniot \
+            .reflected_hugoniot(previous_material_density,
+                                delta_particle_velocity=delta_particle_velocity)
+
+        return Isentrope(
+            pressures=reflected_hugoniot.pressures,
+            particle_velocities=reflected_hugoniot.particle_velocities,
+            intersection=current_material_intersection,
         )

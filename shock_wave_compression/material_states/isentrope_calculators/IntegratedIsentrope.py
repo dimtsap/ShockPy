@@ -50,3 +50,9 @@ class IntegratedIsentrope:
         return Isentrope(pressures=np.atleast_1d(release_pressures),
                          particle_velocities=np.atleast_1d(release_particle_velocities),
                          intersection=intersection)
+
+    def find_previous_material_isentrope(self,
+                                         previous_material_hugoniot,
+                                         current_material_intersection,
+                                         previous_material_density):
+        pass

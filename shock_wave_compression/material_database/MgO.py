@@ -17,7 +17,7 @@ class MgO(Material):
                          initial_density=initial_density,
                          is_stochastic=is_stochastic,
                          released=released)
-        with open(os.path.join(os.getcwd(), "material_database", "data", "samplesMgO.p"), "rb") as input_file:
+        with open(os.path.join(os.path.dirname(__file__), "data", "samplesMgO.p"), "rb") as input_file:
             data = pickle.load(input_file)
         self.nominal_hugoniot = self.calculate_hugoniot(np.array([6.6161, 1.4111, -0.016277]))
         self.hugoniots_list = [self.nominal_hugoniot] if not is_stochastic \

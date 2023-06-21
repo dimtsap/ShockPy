@@ -64,8 +64,8 @@ class Material(ABC):
     def release_isentropes_at_pressure(self, pressure: float):
         isentropes = []
         for hugoniot in self.hugoniots_list:
-            intersection = self._find_hugoniot_point_at_pressure(hugoniot, pressure)
-            release_isentrope = self.isentrope_calculator.calculate_isentrope(hugoniot,intersection, self.Gamma_eff,
+            intersection = hugoniot.find_hugoniot_point_at_pressure(pressure, self.initial_density)
+            release_isentrope = self.isentrope_calculator.calculate_isentrope(hugoniot, intersection, self.Gamma_eff,
                                                                               self.initial_volume, self.released)
             isentropes.append(release_isentrope)
         return isentropes
@@ -78,18 +78,6 @@ class Material(ABC):
         current_volume = 1 / current_density
         compression_ratio = self.initial_volume / current_volume
         pressure = hugoniot.interpolate_particle_velocity(particle_velocity)
-        return Intersection(pressure=pressure, particle_velocity=particle_velocity,
-                            shock_velocity=shock_velocity, volume=current_volume,
-                            compression_ratio=compression_ratio,
-                            hugoniot=hugoniot)
-
-    def _find_hugoniot_point_at_pressure(self, hugoniot: Hugoniot, pressure: float):
-        particle_velocity = hugoniot.interpolate_pressure(pressure)
-        shock_velocity = pressure / (self.initial_density * particle_velocity)  # P=rho0*Us*up
-        current_density = self.initial_density * shock_velocity / (
-                shock_velocity - particle_velocity)  # rho0*Us=rho1*(Us-up)
-        current_volume = 1 / current_density
-        compression_ratio = self.initial_volume / current_volume
         return Intersection(pressure=pressure, particle_velocity=particle_velocity,
                             shock_velocity=shock_velocity, volume=current_volume,
                             compression_ratio=compression_ratio,
@@ -125,25 +113,17 @@ class Material(ABC):
                         volumes=hugoniot_volume)
 
     def intersections_at_pressure(self, pressure):
-        intersections = [self._find_hugoniot_point_at_pressure(hugoniot, pressure)
+        intersections = [hugoniot.find_hugoniot_point_at_pressure(pressure, self.initial_density)
                          for hugoniot in self.hugoniots_list]
         return intersections
 
-    def find_hugoniots_from_next_intersection(self, next_intersection: Intersection):
+    def find_previous_material_intersections_from_current(self, current_intersection: Intersection):
         intersections = []
         for hugoniot in self.hugoniots_list:
-            negative_hugoniot = hugoniot.reflected_hugoniot(self.initial_density)
-            negative_hugoniot_intersection = \
-                self._find_hugoniot_point_at_pressure(negative_hugoniot,
-                                                      next_intersection.pressure)
-            delta_particle_velocity = next_intersection.particle_velocity - \
-                                      negative_hugoniot_intersection.particle_velocity
-            reflected_hugoniot = hugoniot.reflected_hugoniot(self.initial_density,
-                                                             delta_particle_velocity=delta_particle_velocity)
-
-            isentrope = Isentrope(pressures=reflected_hugoniot.pressures,
-                                  particle_velocities=reflected_hugoniot.particle_velocities,
-                                  intersection=next_intersection)
+            isentrope = self.isentrope_calculator \
+                .find_previous_material_isentrope(previous_material_hugoniot=hugoniot,
+                                                  current_material_intersection=current_intersection,
+                                                  previous_material_density=self.initial_density)
 
             intersection = self.calculate_intersection(hugoniot, isentrope)
             intersections.append(intersection)

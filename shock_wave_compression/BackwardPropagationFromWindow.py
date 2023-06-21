@@ -34,7 +34,7 @@ class BackwardPropagationFromWindow:
 
         intersections = []
         for index_pressure, pressure in enumerate(pressures_range):
-            print(f'Material: Quartz, pressure: {index_pressure}')
+            print(f'Material: {self.materials[-1].__class__}, pressure: {index_pressure}')
             intersections.extend(self.materials[-1].intersections_at_pressure(pressure))
 
         for index_material in range(self.n_materials - 2, -1, -1):
@@ -46,10 +46,10 @@ class BackwardPropagationFromWindow:
             current_material_intersections = []
             for index_intersection, intersection in enumerate(previous_material_intersections):
                 print(f'Material: {material_i.__class__}, intersection: {index_intersection}')
-                current_material_intersections.extend(material_i.find_hugoniots_from_next_intersection(intersection))
-            previous_material_intersections = current_material_intersections
+                current_material_intersections.extend(material_i.find_previous_material_intersections_from_current(intersection))
+            intersections = current_material_intersections
 
-        self.initial_intersections = previous_material_intersections
+        self.initial_intersections = intersections
 
     def plot(self):
         plt.style.use('science')

@@ -15,7 +15,7 @@ class Quartz(Material):
                  released=True,
                  is_stochastic=False):
         super().__init__(gamma_eff, initial_density, is_stochastic, released)
-        with open(os.path.join(os.getcwd(), "material_database", "data", "samples_quartz_exponential0.p"), "rb") \
+        with open(os.path.join(os.path.dirname(__file__), "data", "samples_quartz_exponential0.p"), "rb") \
                 as input_file:
             data = pickle.load(input_file)
         self.nominal_hugoniot = self.calculate_hugoniot(np.array([6.278, 1.193, -2.505, -0.3701]))  # exponential hugoniot

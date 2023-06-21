@@ -12,7 +12,7 @@ class Kapton(Material):
                  initial_density: float = 1.33,
                  released=False):  # Source https://dielectricmfg.com/knowledge-base/kapton/
         super().__init__(gamma_eff, initial_density, released)
-        hugoniot_P_up = np.loadtxt(os.path.join(os.getcwd(), "material_database", "data", "kapton_hugoniot.txt"))
+        hugoniot_P_up = np.loadtxt(os.path.join(os.path.dirname(__file__), "data", "kapton_hugoniot.txt"))
         
         p = hugoniot_P_up[:, 0]
         up = hugoniot_P_up[:, 1]
