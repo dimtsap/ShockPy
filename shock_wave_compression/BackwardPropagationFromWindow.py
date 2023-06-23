@@ -42,11 +42,14 @@ class BackwardPropagationFromWindow:
                 else [intersections[index] for index in
                       list(np.random.randint(0, len(intersections), size=n_intersections_per_material))]
 
+            material_next = self.materials[index_material+1]
             material_i = self.materials[index_material]
             current_material_intersections = []
             for index_intersection, intersection in enumerate(previous_material_intersections):
                 print(f'Material: {material_i.__class__}, intersection: {index_intersection}')
-                current_material_intersections.extend(material_i.find_previous_material_intersections_from_current(intersection))
+                current_material_intersections.extend(material_i
+                                                      .find_previous_material_intersections_from_current(intersection,
+                                                                                                         material_next))
             intersections = current_material_intersections
 
         self.initial_intersections = intersections

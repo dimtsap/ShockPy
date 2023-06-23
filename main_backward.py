@@ -10,18 +10,20 @@ from shock_wave_compression.material_database.Quartz import Quartz
 from shock_wave_compression.material_database.baseclass.Material import Material
 from shock_wave_compression.material_states.isentrope_calculators.ReflectedHugoniot import ReflectedHugoniot
 
-Material.isentrope_calculator = ReflectedHugoniot()
+# Material.isentrope_calculator = ReflectedHugoniot()
 
-measured_pressure = 262.44  # GPa
-backward = BackwardPropagationFromWindow(materials=[Kapton(), MgO(is_stochastic=False), Quartz(is_stochastic=False)])
+measured_pressure = 315.03  # GPa
+backward = BackwardPropagationFromWindow(materials=[Kapton(released=False),
+                                                    MgO(is_stochastic=False, released=True),
+                                                    Quartz(is_stochastic=False, released=True)])
 backward.propagate(measured_pressure)
 backward.plot()
 
-# ablator_intersections = np.array(
-#     [(intersection.particle_velocity, intersection.pressure) for intersection in
-#      backward.initial_intersections])
-# mean_ablator_pressure = np.mean(ablator_intersections[:, 1], dtype=np.float64)
-# std_ablator_pressure = np.std(ablator_intersections[:, 1], dtype=np.float64)
+ablator_intersections = np.array(
+    [(intersection.particle_velocity, intersection.pressure) for intersection in
+     backward.initial_intersections])
+mean_ablator_pressure = np.mean(ablator_intersections[:, 1], dtype=np.float64)
+std_ablator_pressure = np.std(ablator_intersections[:, 1], dtype=np.float64)
 #
 # print(f"Mean pressure: {mean_ablator_pressure}")
 # print(f"Std pressure: {std_ablator_pressure}")

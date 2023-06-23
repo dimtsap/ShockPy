@@ -8,7 +8,7 @@ from shock_wave_compression.material_states.Hugoniot import Hugoniot
 
 class Kapton(Material):
 
-    def __init__(self, gamma_eff: float = 0.7,
+    def __init__(self, gamma_eff: float = 0.6,
                  initial_density: float = 1.33,
                  released=False):  # Source https://dielectricmfg.com/knowledge-base/kapton/
         super().__init__(gamma_eff, initial_density, released)

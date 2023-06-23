@@ -117,14 +117,13 @@ class Material(ABC):
                          for hugoniot in self.hugoniots_list]
         return intersections
 
-    def find_previous_material_intersections_from_current(self, current_intersection: Intersection):
+    def find_previous_material_intersections_from_current(self, current_intersection: Intersection, next_material):
         intersections = []
         for hugoniot in self.hugoniots_list:
-            isentrope = self.isentrope_calculator \
+            intersection = self.isentrope_calculator \
                 .find_previous_material_isentrope(previous_material_hugoniot=hugoniot,
                                                   current_material_intersection=current_intersection,
-                                                  previous_material_density=self.initial_density)
-
-            intersection = self.calculate_intersection(hugoniot, isentrope)
+                                                  previous_material=self,
+                                                  next_material=next_material)
             intersections.append(intersection)
         return intersections
