@@ -1,19 +1,21 @@
 from abc import ABC, abstractmethod
 
 import numpy as np
-from scipy.integrate import quad, cumulative_trapezoid
 from scipy.interpolate import splprep, splev
 from shapely.geometry import LineString
 
 from shock_wave_compression.material_states.Hugoniot import Hugoniot
 from shock_wave_compression.material_states.Intersection import Intersection
 from shock_wave_compression.material_states.Isentrope import Isentrope
+from shock_wave_compression.material_states.isentrope_calculators.IntegratedIsentrope import IntegratedIsentrope
 
 
 class Material(ABC):
+    isentrope_calculator = IntegratedIsentrope()
 
     def __init__(self, gamma_eff: float,
                  initial_density: float,
+                 released=True,
                  is_stochastic=False):
         self.is_stochastic = is_stochastic
         self.initial_density = initial_density
@@ -22,66 +24,16 @@ class Material(ABC):
         self.isentropes = []
         self.hugoniots_list = []
         self.nominal_hugoniot: Hugoniot = None
+        self.released = released
 
     def initialize_isentropes_at_pressure(self, shock_pressure: float):
         point_hugoniot_tuples = self.release_isentropes_at_pressure(shock_pressure)
-        release_isentropes = [self.calculate_isentrope(intersection, hugoniot)
+        release_isentropes = [Material.isentrope_calculator.calculate_isentrope(intersection, hugoniot, self.Gamma_eff,
+                                                                                self.initial_volume, self.released)
                               for (intersection, hugoniot) in point_hugoniot_tuples]
         return release_isentropes
 
-    def calculate_isentrope(self, hugoniot, intersection):
-        pressuresList = hugoniot.pressures.tolist()
-        volumesList = hugoniot.volumes.tolist()
-        release_pressures = []
-        release_particle_velocities = []
-        for (volume_Hugoniot, pressure_Hugoniot) in zip([volumesList], [pressuresList]):
-            V = np.linspace(intersection.volume, max(volume_Hugoniot), num=1000)
-
-            S = 1.31867  # What is this parameter.? Is it material dependent.?
-            C01 = intersection.pressure / (self.initial_density * intersection.particle_velocity) \
-                  - S * intersection.particle_velocity
-
-            reference_hugoniot_pressure = self.initial_density * C01 ** 2 * (self.initial_volume / V - 1) \
-                                          * (self.initial_volume / V) / np.square(S - (S - 1) * self.initial_volume / V)
-
-            energy_integral = []
-            for i in range(len(V)):
-                delta_energy_integral_function = lambda x: (x / intersection.volume) ** self.Gamma_eff * \
-                                                           reference_hugoniot_pressure[i] \
-                                                           * (1 - self.Gamma_eff / 2 * (self.initial_volume / x - 1))
-                aux = quad(delta_energy_integral_function, intersection.volume, V[i])
-                energy_integral.append(aux[0])
-
-            Es_E0 = [intersection.pressure * self.initial_volume / 2 * (
-                    intersection.compression_ratio - 1) / intersection.compression_ratio * (
-                             intersection.volume / x) ** self.Gamma_eff - (
-                             intersection.volume / x) ** self.Gamma_eff * y
-                     for (x, y) in zip(V, energy_integral)]
-
-            release_pressure = [PH * (1 - self.Gamma_eff / 2 * (self.initial_volume / v - 1)) + self.Gamma_eff / v * dE
-                                for (PH, v, dE) in zip(reference_hugoniot_pressure, V, Es_E0)]
-
-            release_particle_velocity = [float(intersection.particle_velocity)]
-
-            ups = list(np.real(
-                intersection.particle_velocity + cumulative_trapezoid(np.sqrt(-np.diff(release_pressure) / np.diff(V)),
-                                                                      V[1:],
-                                                                      initial=0)))
-            release_particle_velocity.extend(ups)
-
-            release_pressures.append(np.array(release_pressure))
-            release_particle_velocities.append(np.array(release_particle_velocity))
-
-        return Isentrope(pressures=np.atleast_1d(release_pressures),
-                         particle_velocities=np.atleast_1d(release_particle_velocities),
-                         intersection=intersection)
-
     def calculate_intersection(self, hugoniot, isentrope):
-        # import matplotlib.pyplot as plt
-        # plt.figure()
-        # plt.plot(hugoniot.particle_velocities, hugoniot.pressures)
-        # plt.plot(np.squeeze(isentrope.particle_velocities), np.squeeze(isentrope.pressures))
-        # plt.show()
         line_1 = LineString(np.column_stack((hugoniot.particle_velocities, hugoniot.pressures)))
         line_2 = LineString(np.column_stack((np.squeeze(isentrope.particle_velocities),
                                              np.squeeze(isentrope.pressures))))
@@ -112,18 +64,20 @@ class Material(ABC):
     def release_isentropes_at_pressure(self, pressure: float):
         isentropes = []
         for hugoniot in self.hugoniots_list:
-            intersection = self._find_hugoniot_point_at_pressure(hugoniot, pressure)
-            release_isentrope = self.calculate_isentrope(hugoniot, intersection)
+            intersection = hugoniot.find_hugoniot_point_at_pressure(pressure, self.initial_density)
+            release_isentrope = self.isentrope_calculator.calculate_isentrope(hugoniot, intersection, self.Gamma_eff,
+                                                                              self.initial_volume, self.released)
             isentropes.append(release_isentrope)
         return isentropes
 
-    def _find_hugoniot_point_at_pressure(self, hugoniot: Hugoniot, pressure: float):
-        particle_velocity = hugoniot.interpolate(pressure)
-        shock_velocity = pressure / (self.initial_density * particle_velocity)  # P=rho0*Us*up
+    def _find_hugoniot_point_at_shock_velocity(self, hugoniot: Hugoniot, shock_velocity: float):
+        self.Gamma_eff = 0.619 * (1 - np.exp(-0.0882 * (shock_velocity - 12.0922) ** 1.5))
+        particle_velocity = hugoniot.interpolate_shock_velocity(shock_velocity)
         current_density = self.initial_density * shock_velocity / (
-                shock_velocity - particle_velocity)  # rho0*Us=rho1*(Us-up)
+                shock_velocity - particle_velocity)
         current_volume = 1 / current_density
         compression_ratio = self.initial_volume / current_volume
+        pressure = hugoniot.interpolate_particle_velocity(particle_velocity)
         return Intersection(pressure=pressure, particle_velocity=particle_velocity,
                             shock_velocity=shock_velocity, volume=current_volume,
                             compression_ratio=compression_ratio,
@@ -132,8 +86,14 @@ class Material(ABC):
     def hugoniots_intersection_with_isentrope(self, isentrope: Isentrope):
         new_isentropes = []
         for hugoniot in self.hugoniots_list:
+            # import matplotlib.pyplot as plt
+            # plt.figure()
+            # plt.plot(hugoniot.particle_velocities, hugoniot.pressures)
+            # plt.plot(np.squeeze(isentrope.particle_velocities), np.squeeze(isentrope.pressures))
+            # plt.show()
             intersection = self.calculate_intersection(hugoniot, isentrope)
-            release_isentrope = self.calculate_isentrope(hugoniot, intersection)
+            release_isentrope = self.isentrope_calculator.calculate_isentrope(hugoniot, intersection, self.Gamma_eff,
+                                                                              self.initial_volume, self.released)
             new_isentropes.append(release_isentrope)
         return new_isentropes
 
@@ -142,7 +102,7 @@ class Material(ABC):
         pass
 
     def calculate_hugoniot(self, parameters):
-        hugoniot_particle_velocity = np.linspace(0, 20, num=1000)
+        hugoniot_particle_velocity = np.linspace(0, 30, num=1000)
         hugoniot_shock_velocity = self.analytical_shock_velocity_equation(parameters, hugoniot_particle_velocity)
         hugoniot_pressure = self.initial_density * hugoniot_shock_velocity * hugoniot_particle_velocity
         hugoniot_volume = self.initial_volume * (
@@ -151,3 +111,19 @@ class Material(ABC):
                         particle_velocities=hugoniot_particle_velocity,
                         shock_velocities=hugoniot_shock_velocity,
                         volumes=hugoniot_volume)
+
+    def intersections_at_pressure(self, pressure):
+        intersections = [hugoniot.find_hugoniot_point_at_pressure(pressure, self.initial_density)
+                         for hugoniot in self.hugoniots_list]
+        return intersections
+
+    def find_previous_material_intersections_from_current(self, current_intersection: Intersection, next_material):
+        intersections = []
+        for hugoniot in self.hugoniots_list:
+            intersection = self.isentrope_calculator \
+                .find_previous_material_isentrope(previous_material_hugoniot=hugoniot,
+                                                  current_material_intersection=current_intersection,
+                                                  previous_material=self,
+                                                  next_material=next_material)
+            intersections.append(intersection)
+        return intersections

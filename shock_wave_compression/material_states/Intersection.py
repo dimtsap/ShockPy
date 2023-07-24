@@ -1,4 +1,7 @@
 from dataclasses import dataclass
+
+import numpy as np
+
 from shock_wave_compression.material_states.Hugoniot import Hugoniot
 from shock_wave_compression.material_states.Isentrope import Isentrope
 
