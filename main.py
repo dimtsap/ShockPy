@@ -14,15 +14,12 @@ from shock_wave_compression.material_database.baseclass.Material import Material
 from shock_wave_compression.material_states.isentrope_calculators.ReflectedHugoniot import ReflectedHugoniot
 
 shock_pressure = 211.39  # GPa
-# shock_pressure = intersection.pressure
-# experiment = ShockWaveExperiment(materials=[quartz, MgO(is_stochastic=False)])
-# Material.isentrope_calculator=ReflectedHugoniot()
+Material.isentrope_calculator = ReflectedHugoniot()
 
-experiment=ShockWaveExperiment(materials=[Kapton(released=False),
-                                          MgO(is_stochastic=False, released=True),
-                                          Quartz(is_stochastic=False, released=True)])
-# experiment.run_experiment(shock_pressure, cov=0.05, initial_points=100)
-experiment.run_experiment(shock_pressure)
+experiment = ShockWaveExperiment(materials=[Kapton(released=False),
+                                            MgO(is_stochastic=False, released=True),
+                                            Quartz(is_stochastic=False, released=True)])
+experiment.run_experiment(shock_pressure, cov=0.05, initial_points=100)
 
 experiment.plot()
 
