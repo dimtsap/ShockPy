@@ -28,33 +28,21 @@ jobs:
           make -C docs clean
           make -C docs html
   
-      - name: Init repo in dist folder and commit
-        run: |
-          cd docs/build/html/
-          git init
-          touch .nojekyll
-          git add -A
-          git config --local user.email "dimtsap@hotmail.com"
-          git config --local user.name "Github Action"
-          git commit -m 'deploy'
-      - name: Push to GitHub Pages branch
-        # You may pin to the exact commit or the version.
-        # uses: ftnext/action-push-ghpages@621f3b2f1d34079b4da6051daedb3e200af0dd38
-        uses: ftnext/action-push-ghpages@v1.0.0
+      # - name: Init repo in dist folder and commit
+      #   run: |
+      #     cd docs/build/html/
+      #     git init
+      #     touch .nojekyll
+      #     git add -A
+      #     git config --local user.email "dimtsap@hotmail.com"
+      #     git config --local user.name "Github Action"
+      #     git commit -m 'deploy'
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v2.0.0
         with:
-          # Path to the directory where the static assets are located.
-          build_dir: docs/build/html
-          # Specify GITHUB_TOKEN in your repository.
-          github_token: ${{secrets.GITHUB_TOKEN}}
-  
-      # - name: Force push to destination branch
-      #   uses: ad-m/github-push-action@v0.5.0
-      #   with:
-      #     github_token: ${{secrets.GITHUB_TOKEN}}
-      #     branch: gh-pages
-      #     force: true
-      #     directory: docs/build/html
-      
+          # Path of the directory containing the static assets.
+          path: docs/build/html/
+            
   
       
         
