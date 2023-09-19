@@ -1,14 +1,9 @@
 import numpy as np
-import pandas as pd
-from matplotlib import pyplot as plt
-import seaborn as sns
 
-from shock_wave_compression.BackwardPropagationFromWindow import BackwardPropagationFromWindow
-from shock_wave_compression.material_database.Kapton import Kapton
-from shock_wave_compression.material_database.MgO import MgO
-from shock_wave_compression.material_database.Quartz import Quartz
-from shock_wave_compression.material_database.baseclass.Material import Material
-from shock_wave_compression.material_states.isentrope_calculators.ReflectedHugoniot import ReflectedHugoniot
+from src.shock_wave_compression.BackwardPropagationFromWindow import BackwardPropagationFromWindow
+from src.shock_wave_compression.material_database.Kapton import Kapton
+from src.shock_wave_compression.material_database.MgO import MgO
+from src.shock_wave_compression.material_database.Quartz import Quartz
 
 # Material.isentrope_calculator = ReflectedHugoniot()
 

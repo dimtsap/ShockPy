@@ -7,14 +7,11 @@ Welcome to Analytical shock-wave experiments's documentation!
 =============================================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :hidden:
+
+   Home <self>
+   /material_database/index
+   /material_states/index
+   uncertainty_propagation
 
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

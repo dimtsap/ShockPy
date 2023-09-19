@@ -53,7 +53,7 @@ bayes_estimator = BayesParameterEstimation(data=shock_velocity, inference_model=
                                            nsamples=10000, jump=20, nburn=20000, seed=x0)
 
 s = bayes_estimator.sampler.samples
-pickle.dump(s, open("shock_wave_compression/material_database/data/samplesMgO.p", "wb"))
+pickle.dump(s, open("src/shock_wave_compression/material_database/data/samplesMgO.p", "wb"))
 
 
 import pickle
@@ -65,7 +65,7 @@ import matplotlib
 # plt.rc('text', usetex=True)
 import statistics
 
-s = pickle.load(open("shock_wave_compression/material_database/data/samplesMgO.p", "rb"))
+s = pickle.load(open("src/shock_wave_compression/material_database/data/samplesMgO.p", "rb"))
 
 
 # Function to plot posterior pdf from samples

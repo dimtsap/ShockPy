@@ -4,10 +4,10 @@ import numpy as np
 from scipy.interpolate import splprep, splev
 from shapely.geometry import LineString
 
-from shock_wave_compression.material_states.Hugoniot import Hugoniot
-from shock_wave_compression.material_states.Intersection import Intersection
-from shock_wave_compression.material_states.Isentrope import Isentrope
-from shock_wave_compression.material_states.isentrope_calculators.IntegratedIsentrope import IntegratedIsentrope
+from src.shock_wave_compression.material_states.Hugoniot import Hugoniot
+from src.shock_wave_compression.material_states.Intersection import Intersection
+from src.shock_wave_compression.material_states.Isentrope import Isentrope
+from src.shock_wave_compression.material_states.isentrope_calculators.IntegratedIsentrope import IntegratedIsentrope
 
 
 class Material(ABC):
@@ -17,6 +17,13 @@ class Material(ABC):
                  initial_density: float,
                  released=True,
                  is_stochastic=False):
+        """
+
+        :param gamma_eff:
+        :param initial_density:
+        :param released:
+        :param is_stochastic:
+        """
         self.is_stochastic = is_stochastic
         self.initial_density = initial_density
         self.initial_volume = 1 / initial_density

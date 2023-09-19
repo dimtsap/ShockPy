@@ -1,4 +1,4 @@
-from shock_wave_compression.material_database.baseclass.Material import Material
+from src.shock_wave_compression.material_database.baseclass.Material import Material
 import numpy as np
 import seaborn as sns
 import colorsys

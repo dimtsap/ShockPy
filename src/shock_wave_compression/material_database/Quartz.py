@@ -1,9 +1,7 @@
 import math
 
 import numpy as np
-from scipy import interpolate
-from shock_wave_compression.material_database.baseclass.Material import Material
-from shock_wave_compression.material_states.Hugoniot import Hugoniot
+from src.shock_wave_compression.material_database.baseclass.Material import Material
 import os
 import pickle
 

@@ -5,6 +5,11 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+import os.path
+import sys
+
+# sys.path.append(os.path.relpath("../../src"))
+sys.path.insert(0, os.path.abspath("../.."))
 
 project = 'Analytical shock-wave experiments'
 copyright = '2023, Dimitris Tsapetis'
@@ -15,11 +20,14 @@ author = 'Dimitris Tsapetis'
 
 extensions = [
     'sphinx_rtd_theme',
+    # 'autoapi.extension',
     'sphinx.ext.autodoc']
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+# autoapi_dirs = ['../../src']
+# autodoc_typehints = 'description'
 
 
 # -- Options for HTML output -------------------------------------------------
