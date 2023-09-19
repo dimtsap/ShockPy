@@ -1,5 +1,10 @@
 name: docs_pages_workflow
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  
 on:
   push:
     branches: [main]
@@ -88,23 +93,18 @@ jobs:
           make -C docs clean
           make -C docs html
   
-      - name: Init repo in dist folder and commit
-        run: |
-          cd docs/build/html/
-          git init
-          touch .nojekyll
-          git add -A
-          git config --local user.email "dimtsap@hotmail.com"
-          git config --local user.name "Github Action"
-          git commit -m 'deploy'
-  
-      - name: Force push to destination branch
-        uses: ad-m/github-push-action@v0.5.0
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v2.0.0
         with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          branch: gh-pages
-          force: true
-          directory: ./docs/build/html
+          # Path of the directory containing the static assets.
+          path: docs/build/html/
+
+      - name: Deploy GitHub Pages site
+        uses: actions/deploy-pages@v1.2.9
+        with:
+          token: ${{ github.token }}
+
+            
   
       
         
