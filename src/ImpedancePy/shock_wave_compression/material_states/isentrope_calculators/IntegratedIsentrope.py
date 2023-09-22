@@ -2,9 +2,9 @@ import numpy as np
 from scipy.integrate import quad, cumulative_trapezoid
 from scipy.interpolate import interpolate
 
-from src.shock_wave_compression.material_states.Hugoniot import Hugoniot
-from src.shock_wave_compression.material_states.Intersection import Intersection
-from src.shock_wave_compression.material_states.Isentrope import Isentrope
+from ImpedancePy.shock_wave_compression.material_states.Hugoniot import Hugoniot
+from ImpedancePy.shock_wave_compression.material_states.Intersection import Intersection
+from ImpedancePy.shock_wave_compression.material_states.Isentrope import Isentrope
 
 
 class IntegratedIsentrope:

@@ -1,7 +1,7 @@
 import os.path
 
 import numpy as np
-from src.shock_wave_compression.material_database.baseclass.Material import Material
+from ImpedancePy.shock_wave_compression.material_database.baseclass.Material import Material
 import pickle
 
 

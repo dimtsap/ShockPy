@@ -46,7 +46,7 @@ class Hugoniot:
                 shock_velocity - particle_velocity)  # rho0*Us=rho1*(Us-up)
         current_volume = 1 / current_density
         compression_ratio = initial_volume / current_volume
-        from src.shock_wave_compression.material_states.Intersection import Intersection
+        from src.ImpedancePy.shock_wave_compression.material_states.Intersection import Intersection
         return Intersection(pressure=pressure, particle_velocity=particle_velocity,
                             shock_velocity=shock_velocity, volume=current_volume,
                             compression_ratio=compression_ratio,
