@@ -20,14 +20,20 @@ author = 'Dimitris Tsapetis'
 
 extensions = [
     'sphinx_rtd_theme',
-    # 'autoapi.extension',
-    'sphinx.ext.autodoc']
+    'sphinx.ext.autodoc',
+    "sphinxcontrib.bibtex",
+    "sphinx.ext.intersphinx",
+]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-# autoapi_dirs = ['../../src']
-# autodoc_typehints = 'description'
+autoclass_content = "init"
+add_module_names = False
+autodoc_member_order = "bysource"
+
+bibtex_bibfiles = ["bibliography.bib"]
+bibtex_default_style = "unsrt"
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -35,3 +41,9 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
+    "numpy": ("https://docs.scipy.org/doc/numpy/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/", None),
+}

@@ -1,1 +1,5 @@
 import ImpedancePy.shock_wave_compression.material_database.baseclass
+
+from ImpedancePy.shock_wave_compression.material_database.Kapton import Kapton
+from ImpedancePy.shock_wave_compression.material_database.MgO import MgO
+from ImpedancePy.shock_wave_compression.material_database.Quartz import Quartz

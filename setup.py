@@ -21,7 +21,8 @@ setup(
     extras_require={
       'dev': [
           "Sphinx",
-          "sphinx-rtd-theme"
+          "sphinx-rtd-theme",
+          "sphinxcontrib-bibtex"
       ]
     },
     classifiers=[

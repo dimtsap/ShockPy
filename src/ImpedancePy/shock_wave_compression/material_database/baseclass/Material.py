@@ -93,11 +93,6 @@ class Material(ABC):
     def hugoniots_intersection_with_isentrope(self, isentrope: Isentrope):
         new_isentropes = []
         for hugoniot in self.hugoniots_list:
-            # import matplotlib.pyplot as plt
-            # plt.figure()
-            # plt.plot(hugoniot.particle_velocities, hugoniot.pressures)
-            # plt.plot(np.squeeze(isentrope.particle_velocities), np.squeeze(isentrope.pressures))
-            # plt.show()
             intersection = self.calculate_intersection(hugoniot, isentrope)
             release_isentrope = self.isentrope_calculator.calculate_isentrope(hugoniot, intersection, self.Gamma_eff,
                                                                               self.initial_volume, self.released)

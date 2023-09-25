@@ -6,6 +6,55 @@
 Welcome to Analytical shock-wave experiments's documentation!
 =============================================================
 
+Table of contents
+--------------------
+* :ref:`General Info <General>`
+* :ref:`Method <Method>`
+* :ref:`Examples <Examples>`
+* :ref:`Contents <Contents>`
+* :ref:`Getting started <GettingStarted>`
+
+.. _General:
+General info
+--------------------
+
+
+.. _Method:
+Method
+--------------------
+
+
+.. _Examples:
+Examples
+--------------------
+
+
+.. _Contents:
+Contents
+--------------------
+
+.. _GettingStarted:
+Getting started
+--------------------
+
+**1.** Create an Anaconda Python 3.9 virtual environment:
+
+:code:`conda create -n impedance python==3.9`
+
+:code:`conda activate impedance`
+
+
+**2.** Install code and dependencies via the following commands:
+
+:code:`pip install ImpedancePy`
+
+Mainteners
+^^^^^^^^^^^^^^
+Dimitris Tsapetis
+
+:email: dtsapet1@jhu.edu
+
+
 .. toctree::
    :hidden:
 
@@ -13,5 +62,6 @@ Welcome to Analytical shock-wave experiments's documentation!
    /material_database/index
    /material_states/index
    uncertainty_propagation
+   bibliography.rst
 
 
