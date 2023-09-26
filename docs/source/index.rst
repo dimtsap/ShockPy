@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Analytical shock-wave experiments's documentation!
+Welcome to ImpedancePy's documentation!
 =============================================================
 
 Table of contents

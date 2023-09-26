@@ -10,6 +10,18 @@ from ImpedancePy.shock_wave_compression.material_states.Isentrope import Isentro
 class IntegratedIsentrope:
 
     def calculate_isentrope(self, hugoniot, intersection, Gamma_eff, initial_volume, released=True):
+        """
+        An numerical integration approach to calculating the release isentrope of a material based on :cite:`Knudson`
+        method for Quartz.
+
+        :param hugoniot: Hugoniot of the current material
+        :param intersection: An :class:`.Intersection` object containing the information about the current material
+         shocked state.
+        :param Gamma_eff: The :math:`\Gamma_{eff}` Gruneisen parameter of the current material
+        :param initial_volume: The ambient volume of the current material
+        :param released: released: Boolean parameter indicating whether the reflected shock produced at the interface
+         of the current material with the next is a rarefaction or a reshock.
+        """
         pressuresList = hugoniot.pressures.tolist()
         volumesList = hugoniot.volumes.tolist()
         release_pressures = []
@@ -57,6 +69,21 @@ class IntegratedIsentrope:
                                          previous_material_hugoniot: Hugoniot,
                                          current_material_intersection: Intersection,
                                          previous_material, next_material):
+        """
+        This methods evaluates the Isentrope of the previous material, that goes through the current material shocked
+        state. The two material Hugoniots and the current material shocked state are required. This functions aids in
+        the backward propagation of the experiment from the window to the input laser drive. SIne the evaluation of
+        the isentrope in this case is by numerical integration, a secant method is utilized to find the appropriate
+        isentrope of the previous material.
+
+
+        :param previous_material_hugoniot: The Hugoniot of the previous material. In both Isentrope Calculators it is
+         useful for obtaining the required isentrope and thus propagating the experiment backwards.
+        :param current_material_intersection: An :class:`Intersection` object that contains the information of the
+         current material shocked state.
+        :param previous_material: An object reference to the previous material and its properties
+        :param next_material: An object reference to the current material and its properties:
+        """
         previous_material_density = previous_material.initial_density
         min_intersection = previous_material_hugoniot \
             .find_hugoniot_point_at_pressure(100, previous_material_density)
@@ -91,12 +118,7 @@ class IntegratedIsentrope:
                                               Gamma_eff=previous_material.Gamma_eff,
                                               initial_volume=previous_material.initial_volume,
                                               released=previous_material.released)
-        # import matplotlib.pyplot as plt
-        # plt.figure()
-        # plt.plot(previous_material_hugoniot.particle_velocities, previous_material_hugoniot.pressures)
-        # plt.plot(next_material_hugoniot.particle_velocities, next_material_hugoniot.pressures)
-        # plt.plot(np.squeeze(isentrope1.particle_velocities), np.squeeze(isentrope1.pressures))
-        # plt.show()
+
         goal_intersection1 = next_material.calculate_intersection(hugoniot=next_material_hugoniot,
                                                                   isentrope=isentrope1)
 

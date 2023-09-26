@@ -12,17 +12,32 @@ from ImpedancePy.shock_wave_compression.material_states.isentrope_calculators.In
 
 class Material(ABC):
     isentrope_calculator = IntegratedIsentrope()
+    """Static attribute common for all materials throughout an experiment. Defines the way in which the code 
+    approximates the release isentrope of a material, with two available alternatives, either 
+    :class:`.ReflectedHugoniot` or :class:`.IntegratedIsentrope`"""
 
     def __init__(self, gamma_eff: float,
                  initial_density: float,
                  released=True,
                  is_stochastic=False):
         """
+        Initializer of the Material baseclass.
 
-        :param gamma_eff:
-        :param initial_density:
-        :param released:
-        :param is_stochastic:
+        :param gamma_eff: :math:`\Gamma_{eff}` is the updated Mie-Grüneisen (MG) parameter :math:`\Gamma`
+         for the linear reference of the Mie-Grüneisen (MGLR) model, that assumes the release path can be accurately
+         reproduced with constant :math:`\Gamma` along nearly its entirety. More details on the process of calculating
+         the :math:`\Gamma_{eff}` given experimental data can be found in :cite:`Knudson`.
+        :param initial_density: Ambient density of the material.
+        :param released: Boolean parameter indicating whether the reflected shock produced at the interface of the
+         current material with the next is a rarefaction or a reshock.
+          * If :any:`True`, then the algorithms assumes that the material undergoes release and compute the release part of the isentrope.
+          * If :any:`False`, then the algorithm assumes the material will be reshocked and computed the respective part of the isentrope.
+         Default value: :any:`True`.
+        :param is_stochastic: Boolean that defines if the Hugoniot used for this material is the deterministic one or
+         multiple Hugoniots that are produced as a result of the Bayesian Inference framework will be used.
+          * If :any:`True`, then samples of the Bayesian Inference will be used to generate the :code:`hugoniots_list` attributed.
+          * If :any:`False`, only the nominal Hugoniot populates the list, and is derived from the least-square fitting of its analytical equation to the experimental data.
+         Default value: :any:`False`.
         """
         self.is_stochastic = is_stochastic
         self.initial_density = initial_density
@@ -34,13 +49,31 @@ class Material(ABC):
         self.released = released
 
     def initialize_isentropes_at_pressure(self, shock_pressure: float):
+        """
+        Auxiliary function:
+        Given an input shock pressure, it finds the shocked Hugoniot state of the material and subsequently the
+        release Isentrope that goes through the specific shocked state. In case of an uncertain Hugoniot, a single
+        isentrope for each Hugoniot is calculated.
+
+        :param shock_pressure: Input laser drive (GPa)
+        :return: A list containing the Isentropes of the materia at a specific input pressure.
+        """
         point_hugoniot_tuples = self.release_isentropes_at_pressure(shock_pressure)
         release_isentropes = [Material.isentrope_calculator.calculate_isentrope(intersection, hugoniot, self.Gamma_eff,
                                                                                 self.initial_volume, self.released)
                               for (intersection, hugoniot) in point_hugoniot_tuples]
         return release_isentropes
 
-    def calculate_intersection(self, hugoniot, isentrope):
+    def calculate_intersection(self, hugoniot: Hugoniot, isentrope: Isentrope):
+        """
+        Given a :class:`.Hugoniot` and an :class:`.Isentrope` this function calculates their intersection in the
+        :math:`(u_p - P)` space and then calculates all other quantities (e.g. :math:`U_s`) using the Rankine Hugoniot
+        equations.
+
+        :param hugoniot: A Hugoniot object containing all required info about the next material.
+        :param isentrope: An Isentrope object of the current material
+        :return: An :class:`.Intersection` containing the common state of the Hugoniot and Intersection
+        """
         line_1 = LineString(np.column_stack((hugoniot.particle_velocities, hugoniot.pressures)))
         line_2 = LineString(np.column_stack((np.squeeze(isentrope.particle_velocities),
                                              np.squeeze(isentrope.pressures))))
@@ -120,6 +153,17 @@ class Material(ABC):
         return intersections
 
     def find_previous_material_intersections_from_current(self, current_intersection: Intersection, next_material):
+        """
+        Auxiliary function for the backward propagation of the experiment. Given the current material shocked state in
+        the form of an intersection, as well as a reference to the next material, tries to find the Isentrope of the
+        current material that goes through the next material shocked state.
+
+        :param current_intersection: An :class:`.Intersection` object containing the next material shocked state.
+        :param next_material: A reference to the next material which gives access to its Hugoniots and material
+         properties
+        :return: A list containing one (if the current material is deterministic) or multiple shocked states
+         (if the material is uncertain) in the form of :class:`.Intersection` objects.
+        """
         intersections = []
         for hugoniot in self.hugoniots_list:
             intersection = self.isentrope_calculator \
