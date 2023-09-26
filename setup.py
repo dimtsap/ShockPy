@@ -21,7 +21,8 @@ setup(
     packages=find_packages("src"),
     package_dir={"": "src"},
     install_requires=[
-        "UQpy"
+        "UQpy",
+        "shapely"
     ],
     extras_require={
       'dev': [
