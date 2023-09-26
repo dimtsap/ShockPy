@@ -48,7 +48,7 @@ class Quartz(Material):
         self.hugoniots_list = [self.nominal_hugoniot] if not is_stochastic \
             else [self.calculate_hugoniot(x) for x in data[:1000:10]]
         """
-         A list of the possible material Hugoniots. If the initialization parameter :code:`is_stochastic` is False,
+        A list of the possible material Hugoniots. If the initialization parameter :code:`is_stochastic` is False,
         then the nominal Hugoniot will be a member of the list. Otherwise, uncertain Hugoniots are 
         generated using samples produced by the Bayesian Inference and are contained in the 
         :code:`samples_quartz_exponential0.p` pickle file, inside the data folder of the materials_database module.

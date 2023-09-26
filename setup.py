@@ -22,7 +22,8 @@ setup(
     package_dir={"": "src"},
     install_requires=[
         "UQpy",
-        "shapely"
+        "shapely",
+        "seaborn"
     ],
     extras_require={
       'dev': [
