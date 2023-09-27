@@ -91,6 +91,7 @@ jobs:
           python -m pip install sphinxcontrib-bibtex
           python -m pip install ImpedancePy
           python -m pip install sphinx-gallery
+          python -m pip install SciencePlots
   
       - name: Make the Sphinx Docs
         run: |
