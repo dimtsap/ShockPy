@@ -5,13 +5,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import scienceplots
+import datetime
 
 from src.ImpedancePy.shock_wave_compression.ShockWaveExperiment import ShockWaveExperiment
 
 # quartz = Quartz(is_stochastic=False)
 # intersection = quartz._find_hugoniot_point_at_shock_velocity(quartz.nominal_hugoniot, 24.50)
 from src.ImpedancePy.shock_wave_compression.material_database.baseclass.Material import Material
-from src.ImpedancePy.shock_wave_compression.material_states.isentrope_calculators.ReflectedHugoniot import ReflectedHugoniot
+from src.ImpedancePy.shock_wave_compression.material_states.isentrope_calculators.ReflectedHugoniot import \
+    ReflectedHugoniot
 
 shock_pressure = 211.39  # GPa
 Material.isentrope_calculator = ReflectedHugoniot()
@@ -39,7 +42,7 @@ print(f"Mean window pressure:{mean_window_pressure}")
 print(f"Std window pressure:{std_window_pressure}")
 
 plt.style.use('science')
-import datetime
+
 
 df = pd.DataFrame(window_intersections, columns=['Particle Velocity (km/s)', 'Pressure (GPa)'])
 sns.displot(data=df, x="Particle Velocity (km/s)", kind="kde")
