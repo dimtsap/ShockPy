@@ -23,6 +23,7 @@ extensions = [
     'sphinx.ext.autodoc',
     "sphinxcontrib.bibtex",
     "sphinx.ext.intersphinx",
+    "sphinx_gallery.gen_gallery"
 ]
 
 templates_path = ['_templates']
@@ -46,4 +47,26 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "numpy": ("https://docs.scipy.org/doc/numpy/", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/", None),
+}
+
+sphinx_gallery_conf = {
+    "examples_dirs": [
+        "../code",
+    ],  # path to your example scripts,
+    "gallery_dirs": [
+        "auto_examples",
+    ],  # path to where to save gallery generated output
+    "binder": {
+        # Required keys
+        "org": "dimtsap",
+        "repo": "ImpedancePy",
+        "branch": "main",  # Can be any branch, tag, or commit hash. Use a branch that hosts your docs.
+        "binderhub_url": "https://mybinder.org",
+        # Any URL of a binderhub deployment. Must be full URL (e.g. https://mybinder.org).
+        "dependencies": "../../requirements.txt",
+        "notebooks_dir": "notebooks",
+        "use_jupyter_lab": True
+        # Jupyter notebooks for Binder will be copied to this directory (relative to built documentation root).
+    },
+    "ignore_pattern": "/local_",
 }

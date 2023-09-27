@@ -8,6 +8,12 @@ import matplotlib.pyplot as plt
 class BackwardPropagationFromWindow:
 
     def __init__(self, materials: list[Material]):
+        """
+        Class simulating the backward propagation of experiment using the same sequence of materials as in the
+        experimental setup.
+
+        :param materials: A list containing :class:`.Material` objects in the same sequence as in the experiment.
+        """
         self.initial_intersections = None
         self.materials = materials
         self.n_materials = len(materials)
@@ -28,6 +34,21 @@ class BackwardPropagationFromWindow:
                   cov=None,
                   initial_points=1000,
                   n_intersections_per_material: int = None):
+        """
+        Upon initialization of the class, this method is used to backward tracethe experiment using the Impedance
+        Matching technique.
+
+        :param measured_pressure: Pressure measure at the window material layer of the experimental setup.
+        :param cov: Coefficient of variation of pressure measured at the window layer. If value of this parameter is
+         :any:`None`, the algorithm will assume there is no uncertainty in the measurement.
+        :param initial_points: This parameter defines the number of points to be drawn from a Normal distribution
+         with mean value the :code:`measured_pressure` and standard deviation inferred using the :code:`cov` parameter.
+         This will create a number of initial measured pressures where the experiment will start from, thus taking into
+         account the uncertainty of the window measurement.
+        :param n_intersections_per_material: This parameter limits the number of shocked states calculated during the
+         backward propagation of the experiment, and as a result prevents the number of experiment evaluations from
+         growing geometrically.
+        """
 
         pressures_range = [measured_pressure] if cov is None else \
             cov * measured_pressure * np.random.randn(initial_points) + measured_pressure
@@ -55,6 +76,10 @@ class BackwardPropagationFromWindow:
         self.initial_intersections = intersections
 
     def plot(self):
+        """
+        This functions plots all possible experimental paths the backward propagation of an experiment has taken into
+        account, creating a plot similar to the one below.
+        """
         plt.style.use('science')
         fig, ax = plt.subplots(1, 1, figsize=(8, 6))
         for initial_intersection in self.initial_intersections:

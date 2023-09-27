@@ -8,6 +8,12 @@ import matplotlib.pyplot as plt
 class ShockWaveExperiment:
 
     def __init__(self, materials: list[Material]):
+        """
+        Class simulating the forward propagation of experiment using the same sequence of materials as in the
+        experimental setup.
+
+        :param materials: A list containing :class:`.Material` objects in the same sequence as in the experiment.
+        """
         self.final_isentropes = None
         self.materials = materials
         self.n_materials = len(self.materials)
@@ -28,6 +34,21 @@ class ShockWaveExperiment:
                        cov=None,
                        initial_points: int = 500,
                        n_isentropes_per_material: int = None):
+        """
+        Upon initialization of the class, this method is used to forward propagate the experiment using the Impedance
+        Matching technique.
+
+        :param shock_pressure: Predefined pressure of the input laser drive.
+        :param cov: Coefficient of variation of pressure assumed for the laser drive. If value of this parameter is
+         :any:`None`, the algorithm will assume there is no uncertainty in the input.
+        :param initial_points: This parameter defines the number of points to be drawn from a Normal distribution
+         with mean value the :code:`shock_pressure` and standard deviation inferred using the :code:`cov` parameter.
+         This will create a number of initial shocked states where the experiment will start from, thus taking into
+         account the uncertainty of the input laser drive.
+        :param n_isentropes_per_material: This parameter limits the number of isentropes generated and propagated from
+         one material to the next, and as a result prevents the number of experiment evaluations from growing
+         geometrically.
+        """
         pressures_range = [shock_pressure] if cov is None else \
             cov * shock_pressure * np.random.randn(initial_points) + shock_pressure
 
@@ -49,6 +70,10 @@ class ShockWaveExperiment:
         self.final_isentropes = release_isentropes
 
     def plot(self):
+        """
+        This functions plots all possible experimental paths the forward propagation of an experiment has taken into
+        account, creating a plot similar to the one below.
+        """
         plt.style.use('science')
 
         fig, ax = plt.subplots(1, 1, figsize=(8, 6))
@@ -79,16 +104,16 @@ class ShockWaveExperiment:
         # plt.axhline(y=211.39, color='r', linestyle='-')
         # plt.axhline(y=373.47, color='r', linestyle='-')
         # plt.axhline(y=304.85, color='r', linestyle='-')
-        plt.scatter(x=hyades_up[0], y=hyades_p[0], color="black", marker='*', label='HYADES Kapton point', s=160,
-                    zorder=1e6)
-        plt.scatter(x=hyades_up[1], y=hyades_p[1], color="black", marker='*', label='HYADES MgO point', s=160,
-                    zorder=1e6)
-        plt.scatter(x=hyades_up[2], y=hyades_p[2], color="black", marker='*', label='HYADES Quartz point', s=160,
-                    zorder=1e6)
+        # plt.scatter(x=hyades_up[0], y=hyades_p[0], color="black", marker='*', label='HYADES Kapton point', s=160,
+        #             zorder=1e6)
+        # plt.scatter(x=hyades_up[1], y=hyades_p[1], color="black", marker='*', label='HYADES MgO point', s=160,
+        #             zorder=1e6)
+        # plt.scatter(x=hyades_up[2], y=hyades_p[2], color="black", marker='*', label='HYADES Quartz point', s=160,
+        #             zorder=1e6)
         # plt.scatter(x=hyades_up, y=hyades_p, c='black', marker='*')
         # plt.scatter(x=[x + 9.33 - 4.54 for x in hyades_up], y=hyades_p, c='black', marker='x')
-        plt.legend(prop={'size': 16}, loc='upper left')
-        plt.savefig(f"uncertain_shockwave_{datetime.now()}.png")
+        # plt.legend(prop={'size': 16}, loc='upper left')
+        # plt.savefig(f"uncertain_shockwave_{datetime.now()}.png")
         plt.show()
 
     def _plot_isentrope(self, isentrope, index_material, ax):

@@ -29,7 +29,8 @@ setup(
       'dev': [
           "Sphinx",
           "sphinx-rtd-theme",
-          "sphinxcontrib-bibtex"
+          "sphinxcontrib-bibtex",
+          "sphinx-gallery"
       ]
     },
     classifiers=[

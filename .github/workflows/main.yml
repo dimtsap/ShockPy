@@ -74,6 +74,7 @@ jobs:
   build_docs_job:
     runs-on: ubuntu-latest
     needs: build-n-publish
+    name: Build documentation and publishes it to GithubPages
     steps:
       - name: Checkout
         uses: actions/checkout@v4.0.0
@@ -89,6 +90,7 @@ jobs:
           python -m pip install sphinx-rtd-theme
           python -m pip install sphinxcontrib-bibtex
           python -m pip install ImpedancePy
+          python -m pip install sphinx-gallery
   
       - name: Make the Sphinx Docs
         run: |
