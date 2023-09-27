@@ -3,7 +3,7 @@ import numpy as np
 import seaborn as sns
 import colorsys
 import matplotlib.pyplot as plt
-import scienceplots
+# import scienceplots
 
 
 class BackwardPropagationFromWindow:
@@ -81,7 +81,7 @@ class BackwardPropagationFromWindow:
         This functions plots all possible experimental paths the backward propagation of an experiment has taken into
         account, creating a plot similar to the one below.
         """
-        plt.style.use('science')
+        # plt.style.use('science')
         fig, ax = plt.subplots(1, 1, figsize=(8, 6))
         for initial_intersection in self.initial_intersections:
             index_material = 0

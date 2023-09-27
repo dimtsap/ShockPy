@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-import scienceplots
+# import scienceplots
 import datetime
 
 from src.ImpedancePy.shock_wave_compression.ShockWaveExperiment import ShockWaveExperiment
@@ -41,7 +41,7 @@ std_window_pressure = np.std(window_intersections[:, 1], dtype=np.float64)
 print(f"Mean window pressure:{mean_window_pressure}")
 print(f"Std window pressure:{std_window_pressure}")
 
-plt.style.use('science')
+# plt.style.use('science')
 
 
 df = pd.DataFrame(window_intersections, columns=['Particle Velocity (km/s)', 'Pressure (GPa)'])
