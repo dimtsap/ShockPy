@@ -21,14 +21,14 @@
 
 **1.** Create an Anaconda Python 3.9 virtual environment:
 ```
-conda create -n impedance python==3.9
-conda activate impedance
+conda create -n shock_wave python==3.9
+conda activate shock_wave
 ```
 
 **3.** Install code and dependencies via the following commands: 
 
 ```  
-pip install ImpedancePy
+pip install ShockPy
 ```
 
 ### Mainteners

@@ -4,10 +4,10 @@ import numpy as np
 from scipy.interpolate import splprep, splev
 from shapely.geometry import LineString
 
-from ImpedancePy.shock_wave_compression.material_states.Hugoniot import Hugoniot
-from ImpedancePy.shock_wave_compression.material_states.Intersection import Intersection
-from ImpedancePy.shock_wave_compression.material_states.Isentrope import Isentrope
-from ImpedancePy.shock_wave_compression.material_states.isentrope_calculators.IntegratedIsentrope import IntegratedIsentrope
+from ShockPy.shock_wave_compression.material_states.Hugoniot import Hugoniot
+from ShockPy.shock_wave_compression.material_states.Intersection import Intersection
+from ShockPy.shock_wave_compression.material_states.Isentrope import Isentrope
+from ShockPy.shock_wave_compression.material_states.isentrope_calculators.IntegratedIsentrope import IntegratedIsentrope
 
 
 class Material(ABC):

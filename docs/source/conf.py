@@ -11,7 +11,7 @@ import sys
 # sys.path.append(os.path.relpath("../../src"))
 sys.path.insert(0, os.path.abspath("../.."))
 
-project = 'ImpedancePy'
+project = 'ShockPy'
 copyright = '2023, Dimitris Tsapetis'
 author = 'Dimitris Tsapetis'
 

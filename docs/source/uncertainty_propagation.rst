@@ -34,7 +34,7 @@ Shock-wave Experiment Class
 
 Methods
 ~~~~~~~~~~~~~~~~~~
-.. autoclass:: ImpedancePy.shock_wave_compression.ShockWaveExperiment
+.. autoclass:: ShockPy.shock_wave_compression.ShockWaveExperiment
     :members: run_experiment, plot
 
 .. image:: _static/forward_experiment.png
@@ -53,7 +53,7 @@ Backward Shock-wave Experiment Class
 
 Methods
 ~~~~~~~~~~~~~~~~~~
-.. autoclass:: ImpedancePy.shock_wave_compression.BackwardPropagationFromWindow
+.. autoclass:: ShockPy.shock_wave_compression.BackwardPropagationFromWindow
     :members: propagate, plot
 
 .. image:: _static/backward_experiment.png

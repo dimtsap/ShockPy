@@ -7,9 +7,9 @@ Kapton Class
 
 Methods
 ~~~~~~~~~~~~~~~~~~
-.. autoclass:: ImpedancePy.shock_wave_compression.material_database.Kapton
+.. autoclass:: ShockPy.shock_wave_compression.material_database.Kapton
 
 Attributes
 ~~~~~~~~~~~~~~~~~~
-.. autoattribute:: ImpedancePy.shock_wave_compression.material_database.Kapton.nominal_hugoniot
-.. autoattribute:: ImpedancePy.shock_wave_compression.material_database.Kapton.hugoniots_list
+.. autoattribute:: ShockPy.shock_wave_compression.material_database.Kapton.nominal_hugoniot
+.. autoattribute:: ShockPy.shock_wave_compression.material_database.Kapton.hugoniots_list

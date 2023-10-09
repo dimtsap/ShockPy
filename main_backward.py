@@ -1,9 +1,9 @@
 import numpy as np
 
-from src.ImpedancePy.shock_wave_compression.BackwardPropagationFromWindow import BackwardPropagationFromWindow
-from src.ImpedancePy.shock_wave_compression.material_database.Kapton import Kapton
-from src.ImpedancePy.shock_wave_compression.material_database.MgO import MgO
-from src.ImpedancePy.shock_wave_compression.material_database.Quartz import Quartz
+from src.ShockPy.shock_wave_compression.BackwardPropagationFromWindow import BackwardPropagationFromWindow
+from src.ShockPy.shock_wave_compression.material_database.Kapton import Kapton
+from src.ShockPy.shock_wave_compression.material_database.MgO import MgO
+from src.ShockPy.shock_wave_compression.material_database.Quartz import Quartz
 
 # Material.isentrope_calculator = ReflectedHugoniot()
 

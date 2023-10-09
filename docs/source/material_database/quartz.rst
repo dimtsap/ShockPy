@@ -7,9 +7,9 @@ Quartz Class
 
 Methods
 ~~~~~~~~~~~~~~~~~~
-.. autoclass:: ImpedancePy.shock_wave_compression.material_database.Quartz
+.. autoclass:: ShockPy.shock_wave_compression.material_database.Quartz
 
 Attributes
 ~~~~~~~~~~~~~~~~~~
-.. autoattribute:: ImpedancePy.shock_wave_compression.material_database.Quartz.nominal_hugoniot
-.. autoattribute:: ImpedancePy.shock_wave_compression.material_database.Quartz.hugoniots_list
+.. autoattribute:: ShockPy.shock_wave_compression.material_database.Quartz.nominal_hugoniot
+.. autoattribute:: ShockPy.shock_wave_compression.material_database.Quartz.hugoniots_list

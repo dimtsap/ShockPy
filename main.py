@@ -1,6 +1,6 @@
-from src.ImpedancePy.shock_wave_compression.material_database.Kapton import Kapton
-from src.ImpedancePy.shock_wave_compression.material_database.MgO import MgO
-from src.ImpedancePy.shock_wave_compression.material_database.Quartz import Quartz
+from src.ShockPy.shock_wave_compression.material_database.Kapton import Kapton
+from src.ShockPy.shock_wave_compression.material_database.MgO import MgO
+from src.ShockPy.shock_wave_compression.material_database.Quartz import Quartz
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -8,12 +8,12 @@ import pandas as pd
 # import scienceplots
 import datetime
 
-from src.ImpedancePy.shock_wave_compression.ShockWaveExperiment import ShockWaveExperiment
+from src.ShockPy.shock_wave_compression.ShockWaveExperiment import ShockWaveExperiment
 
 # quartz = Quartz(is_stochastic=False)
 # intersection = quartz._find_hugoniot_point_at_shock_velocity(quartz.nominal_hugoniot, 24.50)
-from src.ImpedancePy.shock_wave_compression.material_database.baseclass.Material import Material
-from src.ImpedancePy.shock_wave_compression.material_states.isentrope_calculators.ReflectedHugoniot import \
+from src.ShockPy.shock_wave_compression.material_database.baseclass.Material import Material
+from src.ShockPy.shock_wave_compression.material_states.isentrope_calculators.ReflectedHugoniot import \
     ReflectedHugoniot
 
 shock_pressure = 211.39  # GPa

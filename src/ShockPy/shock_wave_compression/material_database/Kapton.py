@@ -2,8 +2,8 @@ import os.path
 
 import numpy as np
 
-from ImpedancePy.shock_wave_compression.material_database.baseclass.Material import Material
-from ImpedancePy.shock_wave_compression.material_states.Hugoniot import Hugoniot
+from ShockPy.shock_wave_compression.material_database.baseclass.Material import Material
+from ShockPy.shock_wave_compression.material_states.Hugoniot import Hugoniot
 
 
 class Kapton(Material):

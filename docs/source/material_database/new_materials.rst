@@ -12,12 +12,12 @@ Material Class
 
 Methods
 ~~~~~~~~~~~~~~~~~~
-.. autoclass:: ImpedancePy.shock_wave_compression.baseclass.Material
+.. autoclass:: ShockPy.shock_wave_compression.baseclass.Material
     :members: initialize_isentropes_at_pressure, calculate_intersection, find_previous_material_intersections_from_current
 
 Attributes
 ~~~~~~~~~~~~~~~~~~
-.. autoattribute:: ImpedancePy.shock_wave_compression.material_database.baseclass.Material.isentrope_calculator
+.. autoattribute:: ShockPy.shock_wave_compression.material_database.baseclass.Material.isentrope_calculator
 
 Custom Material Example
 ^^^^^^^^^^^^^^^^^^^^^^^^

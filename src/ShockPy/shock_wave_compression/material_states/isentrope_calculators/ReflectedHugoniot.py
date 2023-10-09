@@ -1,4 +1,4 @@
-from ImpedancePy.shock_wave_compression.material_states.Isentrope import Isentrope
+from ShockPy.shock_wave_compression.material_states.Isentrope import Isentrope
 
 
 class ReflectedHugoniot:

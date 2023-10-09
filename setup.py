@@ -9,7 +9,7 @@ with open('README.md') as f:
     readme = f.read()
 
 setup(
-    name='ImpedancePy',
+    name='ShockPy',
     version=version,
     description="Code developed to analytically model shock wave experiments with uncertainty",
     long_description_content_type="text/markdown",

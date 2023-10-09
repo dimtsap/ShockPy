@@ -10,7 +10,7 @@ Hugoniot Class
 
 Methods
 ~~~~~~~~~~~~~~~~~~
-.. autoclass:: ImpedancePy.shock_wave_compression.material_states.Hugoniot
+.. autoclass:: ShockPy.shock_wave_compression.material_states.Hugoniot
     :members: reflected_hugoniot
 
 
