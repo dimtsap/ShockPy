@@ -1,3 +1,6 @@
+## Documentation 
+https://dimtsap.github.io/ShockPy/
+
 ## Table of contents
 * [General info](#general-info)
 * [Methods-pipeline](#method)

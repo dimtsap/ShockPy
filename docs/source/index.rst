@@ -3,8 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to ImpedancePy's documentation!
+Welcome to ShockPy's documentation!
 =============================================================
+
+https://dimtsap.github.io/ShockPy/
 
 Table of contents
 --------------------
