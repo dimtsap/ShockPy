@@ -8,6 +8,7 @@ from setuptools import setup, find_packages
 with open('README.md') as f:
     readme = f.read()
 
+include_package_data = True
 setup(
     name='ShockPy',
     version=version,
@@ -20,6 +21,9 @@ setup(
     platforms=["OSX", "Windows", "Linux"],
     packages=find_packages("src"),
     package_dir={"": "src"},
+    package_data={
+        'data': ["*"]
+    },
     install_requires=[
         "UQpy",
         "shapely",
