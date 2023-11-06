@@ -43,6 +43,13 @@ bibtex_default_style = "unsrt"
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
+html_theme_options = {
+    "logo_only": True,
+    "style_nav_header_background": "#FFFFFF",
+}
+
+html_logo = "_static/logo.png"
+
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "numpy": ("https://docs.scipy.org/doc/numpy/", None),
