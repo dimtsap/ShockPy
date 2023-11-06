@@ -1,3 +1,5 @@
+<img src="docs/source/_static/logo.png" width="900">
+
 ## Documentation 
 https://dimtsap.github.io/ShockPy/
 
@@ -24,7 +26,7 @@ Inside the [documentation](https://dimtsap.github.io/ShockPy/auto_examples/index
 for both forward and backward propagation of the shock-wave experiments allowing the option of including uncertainty to the predicted outcomes. 
 An illustration of forward experiment propagation for a three material experimental setup is provided below.  
 
-<img src="docs/source/_static/forward_experiment.png" width="900">
+<img src="docs/source/_static/forward_experiment.png" width="500">
 
 ## Contents
 
