@@ -108,7 +108,20 @@ jobs:
         uses: actions/deploy-pages@v1.2.9
         with:
           token: ${{ github.token }}
-
+  release:
+    runs-on: ubuntu-latest
+    needs: build-n-publish
+    name: Create a Github Release
+    env:
+      SEMVER: ${{ needs.calculate-version.outputs.semVer }}
+    steps:
+      - name: Github Release
+        # You may pin to the exact commit or the version.
+        # uses: elgohr/Github-Release-Action@dbf611facd8af218b92971a7b5a75d2662cda64e
+        uses: elgohr/Github-Release-Action@v5
+        with:
+          # The name of the release to publish
+          title: v$SEMVER
             
   
       
