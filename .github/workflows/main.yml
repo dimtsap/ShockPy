@@ -110,10 +110,9 @@ jobs:
   #         token: ${{ github.token }}
   release:
     runs-on: ubuntu-latest
-    needs: build-n-publish
+    needs: [calculate-version, build-n-publish]
     name: Create a Github Release
     env:
-      GITHUB_TOKEN: ${{ secrets.GH_VARIABLE_PAT }}
       GH_TOKEN: ${{ github.token }}
       SEMVER: ${{ needs.calculate-version.outputs.semVer }}
     steps:
@@ -125,11 +124,9 @@ jobs:
         run: echo RELEASE_TAG=v$SEMVER >> $GITHUB_ENV
       - name: Display Tag
         run: echo $RELEASE_TAG
-      - name: Set GH CLI variable
-        run: gh variable set TAG --body "$RELEASE_TAG"
       - name: Create Github release
         run: |
-          gh release create "$TAG"
+          gh release create $RELEASE_TAG
             
   
       
