@@ -120,9 +120,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Set the release tag environment variable
+        run: echo RELEASE_TAG=v$SEMVER >> $GITHUB_ENV
       - name: Create Github release
         run: |
-          gh release create "v$SEMVER"
+          gh release create $RELEASE_TAG
             
   
       
