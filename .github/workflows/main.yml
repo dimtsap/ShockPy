@@ -116,9 +116,12 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       SEMVER: ${{ needs.calculate-version.outputs.semVer }}
     steps:
-      - name: List directory
+      - name: Display current working dir
         run: |
           echo $PWD
+      - name: List dir
+        run: |
+          ls 
       # - name: Create Github release
       #   run: |
       #     gh release create 'v$SEMVER'
