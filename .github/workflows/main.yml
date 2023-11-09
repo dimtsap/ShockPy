@@ -1,7 +1,7 @@
 name: docs_pages_workflow
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
   
