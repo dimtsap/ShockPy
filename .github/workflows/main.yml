@@ -116,6 +116,10 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       SEMVER: ${{ needs.calculate-version.outputs.semVer }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Display current working dir
         run: |
           echo $PWD
