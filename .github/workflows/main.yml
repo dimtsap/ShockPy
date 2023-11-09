@@ -122,10 +122,7 @@ jobs:
           fetch-depth: 0
       - name: Create Github release
         run: |
-          gh release create 'v$SEMVER'
-      - name: Upload Github release
-        run: |
-          gh release upload 'v$SEMVER'
+          gh release create v$SEMVER
             
   
       
