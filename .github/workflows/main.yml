@@ -126,7 +126,7 @@ jobs:
         run: echo $RELEASE_TAG
       - name: Create Github release
         run: |
-          gh release create "${{RELEASE_TAG}}"
+          gh release create "$RELEASE_TAG"
             
   
       
