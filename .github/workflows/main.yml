@@ -113,6 +113,7 @@ jobs:
     needs: build-n-publish
     name: Create a Github Release
     env:
+      GITHUB_TOKEN: ${{ secrets.GH_VARIABLE_PAT }}
       GH_TOKEN: ${{ github.token }}
       SEMVER: ${{ needs.calculate-version.outputs.semVer }}
     steps:
